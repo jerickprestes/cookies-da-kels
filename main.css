@@ -1,0 +1,2405 @@
+/* ==========================================================================
+   Cookies da Kels — main.css
+   Landing page baseada no layout do Figma (frame "Desktop", 1440px).
+   Mobile first: estilos base = celular; ampliações em min-width.
+
+   Índice
+   1. Reset
+   2. Tokens (cores, fontes, medidas)
+   3. Base e utilitários (container, títulos, botões)
+   4. Seção base (100vh) e ondas decorativas
+   5. Header / logo
+   6. Seção 1 — Apresentação (hero)
+   7. Seção 2 — Receita secreta
+   8. Cards de sabor (vitrines e cardápio)
+   9. Seção 4 — Sobre a Kel
+  10. Seção 6 — Sabores limitados (a seção 5 é Depoimentos, em 12b)
+  11. Seção 7 — Seja um revendedor (a seção 8 é o FAQ, em 12b)
+  12. Seção 9 — Contato e rodapé
+ 12b. Complementos de conteúdo (seletor de tamanho, depoimentos, FAQ, botão flutuante)
+  13. Breakpoints: 640px · 900px · 1024px
+  14. Acessibilidade
+   ========================================================================== */
+
+
+/* Fontes do Google Fonts, hospedadas em assets/fonts (funciona offline):
+   Lobster ≈ Frunch (títulos) · Montserrat ≈ Gotham (texto) */
+@font-face {
+  font-family: "Lobster";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/lobster-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("assets/fonts/montserrat-latin-700-normal.woff2") format("woff2");
+}
+
+
+/* 1. RESET ---------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul,
+ol {
+  list-style: none;
+}
+
+
+/* 2. TOKENS --------------------------------------------------------------- */
+:root {
+  /* Paleta extraída do Figma */
+  --rosa: #e790a3;
+  --rosa-claro: #f2d4db;
+  --rosa-texto: #b8456a;       /* rosa escuro p/ textos pequenos sobre branco (≈5:1); o --rosa fica p/ fundos e títulos grandes */
+  --roxo: #8562ac;
+  --branco: #ffffff;
+
+  /* Fontes (declaradas em @font-face acima) */
+  --fonte-titulo: "Lobster", cursive;
+  --fonte-texto: "Montserrat", system-ui, sans-serif;
+
+  /* Medidas */
+  --container: 940px;          /* conteúdo vai de x=250 a x=1190 no Figma */
+  --gutter: 1.5rem;
+  --onda-h: clamp(28px, 4.17vw, 60px);   /* ondas têm 60px em 1440px */
+  --header-h: 150px;           /* altura da faixa branca do topo */
+
+  /* Escala de texto (fluida) */
+  --texto: clamp(0.9375rem, 1.25vw, 1.125rem);   /* parágrafos (era até 22px) */
+  --titulo: clamp(2.1rem, 3.75vw, 3.375rem);   /* Lobster é mais estreita que a Frunch: ~54px p/ equivaler aos 48px do Figma */
+}
+
+
+/* 3. BASE E UTILITÁRIOS --------------------------------------------------- */
+html {
+  background-color: var(--branco);
+}
+
+body {
+  font-family: var(--fonte-texto);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--rosa);
+  background-color: var(--branco);
+  -webkit-font-smoothing: antialiased;
+}
+
+.container {
+  width: min(100% - (var(--gutter) * 2), var(--container));
+  margin-inline: auto;
+}
+
+/* Títulos manuscritos (Frunch no Figma) */
+.titulo {
+  font-family: var(--fonte-titulo);
+  font-weight: 400;
+  font-size: var(--titulo);
+  line-height: 1.15;
+}
+
+.titulo--rosa   { color: var(--rosa); }
+.titulo--branco { color: var(--branco); }
+.titulo--centro { text-align: center; }
+
+/* Botões em pílula */
+.btn {
+  --btn-h: 64px;
+  --btn-fs: 1.5rem;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: var(--btn-h);
+  padding-inline: 1.5rem;
+  border: 0;
+  border-radius: 200px;
+  font-family: var(--fonte-texto);
+  font-weight: 700;
+  font-size: var(--btn-fs);
+  line-height: 1;
+  text-align: center;
+  transition: transform 0.2s ease, filter 0.2s ease,
+              background-color 0.2s ease, color 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn--roxo {
+  background-color: var(--roxo);
+  color: var(--branco);
+}
+
+.btn--roxo:hover {
+  filter: brightness(1.08);
+}
+
+.btn--contorno {
+  --btn-h: 50px;
+  --btn-fs: 1.25rem;
+
+  border: 2px solid var(--rosa-texto);
+  background-color: transparent;
+  color: var(--rosa-texto);
+}
+
+.btn--contorno:hover {
+  background-color: var(--rosa-texto);
+  color: var(--branco);
+}
+
+
+/* 4. SEÇÃO BASE (100vh) E ONDAS ------------------------------------------- */
+/* Toda seção ocupa no mínimo a altura da tela e centraliza o conteúdo.
+   Se o conteúdo for maior (celulares), a seção cresce em vez de cortar. */
+.section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-block: 4rem calc(var(--onda-h) + 3rem);
+  overflow-x: clip;
+}
+
+/* Onda no rodapé da seção: pintada com a cor da PRÓXIMA seção. */
+.has-wave::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: -1px;
+  z-index: 1;
+  height: var(--onda-h);
+  background-position: center bottom;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+}
+
+.has-wave--branca::after { background-image: url("assets/curva-branca.svg"); }
+.has-wave--rosa::after   { background-image: url("assets/curva-rosa.svg"); }
+
+
+/* 5. HEADER / LOGO / MENU OFFCANVAS --------------------------------------- */
+/* Logo centralizado sobre a faixa branca da primeira seção; botão do menu no canto. */
+.site-header {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  padding-top: 1.5rem;
+}
+
+.site-header__logo img {
+  width: 190px;
+  height: auto;
+}
+
+/* Botão "hambúrguer" */
+.menu-toggle {
+  position: fixed;
+  top: 1rem;
+  right: var(--gutter);
+  z-index: 35;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--roxo);
+  box-shadow: 0 0 0 2px var(--branco), 0 4px 12px rgb(0 0 0 / 0.25);
+  cursor: pointer;
+  transition: filter 0.2s ease, opacity 0.2s ease, visibility 0.2s ease;
+}
+
+/* Some enquanto algum painel está aberto */
+body.painel-aberto .menu-toggle {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.menu-toggle:hover {
+  filter: brightness(1.1);
+}
+
+.menu-toggle__barras,
+.menu-toggle__barras::before,
+.menu-toggle__barras::after {
+  display: block;
+  width: 22px;
+  height: 3px;
+  border-radius: 2px;
+  background-color: var(--branco);
+}
+
+.menu-toggle__barras {
+  position: relative;
+}
+
+.menu-toggle__barras::before,
+.menu-toggle__barras::after {
+  content: "";
+  position: absolute;
+  left: 0;
+}
+
+.menu-toggle__barras::before { top: -7px; }
+.menu-toggle__barras::after  { top: 7px; }
+
+/* Painel lateral (offcanvas) que desliza da direita */
+.offcanvas {
+  position: fixed;
+  inset: 0 0 0 auto;
+  z-index: 45;
+  display: flex;
+  flex-direction: column;
+  width: min(320px, 85vw);
+  padding: 1rem 1.5rem 2rem;
+  background-color: var(--roxo);
+  color: var(--branco);
+  transform: translateX(100%);
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.offcanvas.is-open {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.3s ease;
+}
+
+.offcanvas__fechar {
+  align-self: flex-end;
+  width: 48px;
+  height: 48px;
+  border: 0;
+  background: none;
+  font-size: 2.25rem;
+  line-height: 1;
+  color: var(--branco);
+  cursor: pointer;
+}
+
+.offcanvas--menu ul {
+  margin-top: 1.5rem;
+}
+
+.offcanvas--menu li + li {
+  border-top: 1px solid rgb(255 255 255 / 0.25);
+}
+
+.offcanvas--menu li a,
+.offcanvas--menu li button {
+  display: block;
+  padding: 1rem 0;
+  font-family: var(--fonte-titulo);
+  width: 100%;
+  border: 0;
+  background: none;
+  font-size: 1.875rem;
+  line-height: 1.1;
+  color: var(--branco);
+  text-align: left;
+  cursor: pointer;
+}
+
+.offcanvas--menu li a:hover,
+.offcanvas--menu li button:hover {
+  color: var(--rosa-claro);
+}
+
+/* Fundo escurecido atrás do painel */
+.offcanvas__fundo {
+  position: fixed;
+  inset: 0;
+  z-index: 42;
+  background-color: rgb(0 0 0 / 0.45);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.offcanvas__fundo.is-open {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease;
+}
+
+/* Trava a rolagem da página com o menu aberto */
+body.painel-aberto {
+  overflow: hidden;
+}
+
+
+/* 6. SEÇÃO 1 — APRESENTAÇÃO ------------------------------------------------ */
+.hero {
+  padding-top: var(--header-h);
+  /* faixa branca no topo (logo) + resto rosa */
+  background: linear-gradient(to bottom,
+              var(--branco) calc(var(--header-h) - 1px),
+              var(--rosa) calc(var(--header-h) - 1px));
+}
+
+/* Onda rosa que "sobe" na faixa branca do topo */
+.hero::before {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: calc(var(--header-h) - var(--onda-h));
+  height: var(--onda-h);
+  background: url("assets/curva-rosa.svg") center bottom / 100% 100% no-repeat;
+  pointer-events: none;
+}
+
+.hero__inner {
+  display: grid;
+  gap: 2.5rem;
+  align-items: center;
+  margin-block: auto;
+  padding-block: 0;
+  text-align: center;
+}
+
+.hero__texto {
+  color: var(--branco);
+}
+
+.hero__texto .titulo {
+  color: var(--branco);
+  font-size: clamp(1.9rem, 3.1vw, 2.8rem);   /* ~44px (equivale aos 40px da Frunch) */
+  margin-bottom: 1.25rem;
+}
+
+.hero__texto p {
+  font-size: var(--texto);
+  margin-bottom: 1.25rem;
+}
+
+.hero__texto .btn {
+  max-width: 465px;
+  --btn-fs: clamp(1.5rem, 2.5vw, 2.25rem);   /* 36px no desktop */
+}
+
+/* Círculo roxo + cookie que "vaza" do círculo */
+.hero__visual {
+  position: relative;
+  width: min(386px, 68vw);
+  aspect-ratio: 1;
+  margin-inline: auto;
+}
+
+.hero__circulo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--roxo);
+  box-shadow: 10px 14px 0 var(--roxo);
+}
+
+.hero__cookie {
+  position: absolute;
+  z-index: 2;
+  top: -12%;
+  left: -12%;
+  width: 124%;
+  max-width: none;
+}
+
+
+/* 7. SEÇÃO 2 — RECEITA SECRETA -------------------------------------------- */
+.receita__lista {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2.5rem 1rem;
+  margin-top: 2.5rem;
+  text-align: center;
+}
+
+.titulo + .receita__lista {
+  max-width: 940px;
+}
+
+#receita-titulo {
+  max-width: 624px;
+  margin-inline: auto;
+}
+
+.ingrediente__visual {
+  position: relative;
+  width: 100%;
+  max-width: 228px;
+  aspect-ratio: 1;
+  margin: 0 auto 1.25rem;
+  border-radius: 50%;
+  background-color: var(--rosa);
+}
+
+/* As imagens "vazam" do círculo: medidas em % do círculo (228px no Figma) */
+.ingrediente__img {
+  position: absolute;
+  max-width: none;
+  height: auto;
+}
+
+.ingrediente__img--manteiga    { width: 109.2%; left: 9.6%;   top: 13.6%; }
+.ingrediente__img--chocolate   { width: 105.3%; left: 3.1%;   top: -7.5%; }
+.ingrediente__img--ingredientes{ width: 152.6%; left: -49.6%; top: -14.9%; }
+.ingrediente__img--luvas       { width: 107%;   left: -3.5%;  top: -9.2%; }
+
+.ingrediente h3 {
+  margin-bottom: 0.9em;
+  font-size: clamp(1rem, 1.67vw, 1.5rem);
+  font-weight: 700;
+  color: var(--roxo);
+}
+
+.ingrediente p {
+  font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+  font-weight: 500;
+  color: var(--roxo);
+}
+
+
+/* 8. CARDS (usados nas vitrines e no cardápio) ---------------------------- */
+.card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: var(--branco);
+}
+
+/* Foto quadrada (228×228 no Figma), recortada em cima com cantos de 20px */
+.card__foto {
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.card__foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 48%;
+}
+
+/* Enquadramento de cada foto, igual ao recorte do Figma */
+.card--tradicional .card__foto img { object-position: 50% 48%; }
+.card--triple      .card__foto img { object-position: 50% 45%; }
+.card--redvelvet   .card__foto img { object-position: 50% 30%; }
+.card--nutella     .card__foto img { object-position: 50% 2%; }
+
+.card__corpo {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 19px 19px 12px;
+}
+
+.card__nome,
+.card__desc {
+  padding-inline: 19px;
+}
+
+.card__nome {
+  font-size: 0.875rem;       /* 14px */
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.card__desc {
+  flex: 1;                   /* empurra preço e botão para o fundo */
+  margin-top: 0.5rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.75rem;        /* 12px */
+  line-height: 1.25;
+}
+
+.card__tamanho {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  text-align: center;
+  color: var(--roxo);
+}
+
+.card__preco {
+  margin: 0.4rem 0 0.4rem;
+  font-size: 1.5rem;         /* 24px */
+  font-weight: 700;
+  text-align: center;
+  color: var(--roxo);
+}
+
+
+/* 9. SEÇÃO 4 — SOBRE A KEL ------------------------------------------------ */
+.sobre__grade {
+  display: grid;
+  gap: 3rem;
+  align-items: center;
+}
+
+.sobre__texto .titulo {
+  margin-bottom: 1.25rem;
+}
+
+.sobre__texto p {
+  font-size: var(--texto);
+}
+
+.sobre__texto p + p {
+  margin-top: 1.25em;
+}
+
+/* Foto em círculo com "sombra" rosa sólida (disco deslocado), como no Figma.
+   O box-shadow fica fora do círculo, então não é cortado pelo overflow. */
+.sobre__foto {
+  position: relative;
+  width: min(386px, 78vw);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 50%;
+  background-color: #d9d9d9;
+  box-shadow: 4px 8px 0 var(--rosa), 9px 14px 0 var(--rosa);
+}
+
+/* Enquadramento da foto dentro do círculo (medidas do recorte no Figma) */
+.sobre__foto img {
+  position: absolute;
+  top: -28%;
+  left: -13.2%;
+  width: 122.8%;
+  max-width: none;
+}
+
+
+/* 10. SEÇÃO 5 — SABORES LIMITADOS ----------------------------------------- */
+.limitados {
+  background-color: var(--rosa);
+}
+
+.limitados__card {
+  width: min(100%, 465px);
+  margin-inline: auto;
+  padding: 2.5rem 1.5rem;
+  border-radius: 20px;
+  background-color: var(--branco);
+}
+
+.limitados__card .titulo {
+  max-width: 306px;
+  margin: 0 auto 1.75rem;
+}
+
+.limitados__card p {
+  font-size: clamp(0.9375rem, 1.15vw, 1.0625rem);
+}
+
+.limitados__card p + p {
+  margin-top: 1.25em;
+}
+
+.limitados__card .btn {
+  display: flex;
+  width: 100%;
+  max-width: 306px;
+  margin: 0 auto;
+}
+
+.btn--grande {
+  --btn-h: 64px;
+  --btn-fs: clamp(1.75rem, 3.34vw, 3rem);   /* 48px no desktop */
+}
+
+
+/* 11. SEÇÃO 6 — SEJA UM REVENDEDOR ---------------------------------------- */
+.revendedor__grade {
+  display: grid;
+  gap: 2.5rem;
+  margin-top: 2.5rem;
+}
+
+.revendedor__visual {
+  width: min(465px, 82vw);
+  margin-inline: auto;
+}
+
+.revendedor__moldura {
+  position: relative;
+  aspect-ratio: 1;
+}
+
+.revendedor__circulo {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background-color: var(--rosa-claro);
+  box-shadow: 4px 8px 0 var(--rosa);
+}
+
+.revendedor__cracha {
+  position: absolute;
+  top: -2.8%;
+  left: 17%;
+  width: 66%;
+  max-width: none;
+}
+
+.revendedor__intro {
+  margin-bottom: 1.75rem;
+  font-size: clamp(1rem, 1.4vw, 1.25rem);
+  font-weight: 700;
+}
+
+.passos {
+  display: flex;
+  flex-direction: column;
+  gap: 1.75rem;
+}
+
+.passo {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 10px;
+  align-items: center;
+}
+
+.passo__numero {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--rosa);
+  font-family: var(--fonte-titulo);
+  font-size: 2rem;
+  line-height: 1;
+  color: var(--branco);
+}
+
+.passo p {
+  font-size: clamp(0.9rem, 1.15vw, 1.0625rem);
+}
+
+
+/* 12. SEÇÃO 7 — CONTATO E RODAPÉ ------------------------------------------ */
+.contato {
+  padding-block: 4rem 2rem;
+  background-color: var(--rosa);
+}
+
+.contato__container {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.contato__canais {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.canal {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--branco);
+  font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+  overflow-wrap: anywhere;
+}
+
+.canal img {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+}
+
+/* Mapa: recorte 940×267 sobre a imagem de 1036×503 do Figma */
+.mapa {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background-color: var(--rosa-claro);
+}
+
+.mapa iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.rodape {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-top: auto;
+}
+
+.rodape__logo {
+  width: 120px;
+  height: auto;
+}
+
+.rodape__redes {
+  display: flex;
+  gap: 8px;
+}
+
+.rodape__redes img {
+  width: 48px;
+  height: 48px;
+  transition: transform 0.2s ease;
+}
+
+.rodape__redes a:hover img {
+  transform: translateY(-2px);
+}
+
+
+/* 12b. COMPLEMENTOS DE CONTEÚDO (v3) -------------------------------------- */
+
+/* Textos pequenos sobre fundo branco: rosa escuro (contraste ≥ 4,5:1) */
+.card__nome,
+.card__desc,
+.sobre__texto p,
+.limitados__card p,
+.revendedor__intro,
+.passo p {
+  color: var(--rosa-texto);
+}
+
+/* Hero: linha de informações práticas (negrito p/ compensar o contraste) */
+.hero__texto .hero__info {
+  font-size: clamp(0.9375rem, 1.3vw, 1.125rem);
+  font-weight: 700;
+}
+
+/* Receita: prova por ingrediente, aviso de alergênicos e botão */
+.ingrediente .ingrediente__prova {
+  margin-top: 0.4em;
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+
+.receita__aviso {
+  margin: 2rem 0 0;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  background-color: var(--rosa-claro);
+  font-size: 0.875rem;
+  line-height: 1.4;
+  text-align: center;
+  color: var(--roxo);
+}
+
+.receita__cta {
+  display: flex;
+  max-width: 306px;
+  margin: 1.5rem auto 0;
+  --btn-h: 56px;
+  --btn-fs: 1.25rem;
+}
+
+/* Seletor de tamanho do pacote (P, M, G, GG) */
+.card__tamanhos {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 0.6rem;
+  border: 0;
+}
+
+.tamanho-opcao {
+  position: relative;
+  cursor: pointer;
+}
+
+.tamanho-opcao input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.tamanho-opcao span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 32px;
+  padding-inline: 0.4rem;
+  border: 2px solid var(--roxo);
+  border-radius: 200px;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--roxo);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.tamanho-opcao input:checked + span {
+  background-color: var(--roxo);
+  color: var(--branco);
+}
+
+.tamanho-opcao input:focus-visible + span {
+  outline: 3px solid var(--rosa-texto);
+  outline-offset: 2px;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Sabores: botão do card e linhas abaixo da grade */
+.card .btn {
+  --btn-h: 46px;
+  --btn-fs: 0.9375rem;
+  padding-inline: 0.5rem;
+}
+
+.card__preco span {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.cardapio__rodape {
+  margin-top: 1.75rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--branco);
+}
+
+.cardapio__rodape p + p {
+  margin-top: 0.4rem;
+}
+
+.cardapio__rodape a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+/* Sobre: frase de fatos, destaque só na última frase e assinatura */
+.sobre__texto .sobre__fato {
+  margin-bottom: 1.25em;
+  font-weight: 700;
+}
+
+.sobre__texto .sobre__assinatura {
+  margin-top: 1rem;
+  font-family: var(--fonte-titulo);
+  font-size: 1.75rem;
+}
+
+/* Depoimentos (nova seção) */
+.depoimentos__lista {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.depoimento {
+  height: 100%;
+  padding: 1.75rem 1.5rem;
+  border-radius: 20px;
+  background-color: var(--rosa-claro);
+}
+
+.depoimento blockquote p {
+  font-size: 1.0625rem;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--roxo);
+}
+
+.depoimento figcaption {
+  margin-top: 1rem;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--rosa-texto);
+}
+
+.depoimentos__cta {
+  display: flex;
+  max-width: 306px;
+  margin: 2.5rem auto 0;
+}
+
+/* Sabores limitados: bloco de destaque e dois botões */
+.limitados__card .limitados__destaque {
+  margin: 0 0 1.25rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background-color: var(--rosa-claro);
+  font-size: 1rem;
+  text-align: center;
+  color: var(--roxo);
+}
+
+.limitados__acoes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.75rem;
+}
+
+.limitados__acoes .btn {
+  --btn-h: auto;
+  --btn-fs: 1rem;
+  min-height: 52px;
+  max-width: none;
+  padding: 0.75rem 1.25rem;
+  line-height: 1.2;
+}
+
+/* Revendedor: legenda do crachá e caixa de condições */
+.revendedor__legenda {
+  margin-top: 0.75rem;
+  font-size: 0.875rem;
+  text-align: center;
+  color: var(--rosa-texto);
+}
+
+.condicoes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 1.5rem;
+}
+
+.condicoes div {
+  padding: 0.55rem 0.8rem;
+  border-radius: 12px;
+  background-color: var(--rosa-claro);
+}
+
+.condicoes dt {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--rosa-texto);
+}
+
+.condicoes dd {
+  margin-top: 0.15rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--roxo);
+}
+
+.revendedor__conteudo .revendedor__cta {
+  --btn-h: 56px;
+  --btn-fs: 1.25rem;
+  margin-top: 1.5rem;
+}
+
+/* FAQ (nova seção): acordeão com <details> */
+.faq__lista {
+  margin-top: 2rem;
+}
+
+.faq__item {
+  border-bottom: 2px solid var(--rosa-claro);
+}
+
+.faq__item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--roxo);
+  cursor: pointer;
+  list-style: none;
+}
+
+.faq__item summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq__item summary::after {
+  content: "+";
+  flex-shrink: 0;
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--rosa-texto);
+}
+
+.faq__item[open] summary::after {
+  content: "–";
+}
+
+.faq__item p {
+  padding-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: var(--roxo);
+}
+
+/* Contato: horário, endereço e @ das redes */
+.contato__horario,
+.contato__endereco,
+.rodape__arroba {
+  color: var(--branco);
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.contato__horario {
+  text-align: center;
+}
+
+.contato__local {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.rodape__social {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+/* Botão flutuante do WhatsApp (some quando a seção de contato aparece) */
+.whats-flutuante {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 20;
+  width: 56px;
+  height: 56px;
+  transition: opacity 0.2s ease, visibility 0.2s ease, bottom 0.3s ease;
+}
+
+.whats-flutuante__btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.whats-flutuante__btn:hover {
+  transform: scale(1.08);
+}
+
+.whats-flutuante__btn img {
+  width: 100%;
+  height: 100%;
+}
+
+/* Balão com as duas opções de contato */
+.whats-balao {
+  position: absolute;
+  right: 0;
+  bottom: calc(100% + 0.9rem);
+  width: min(300px, calc(100vw - 2rem));
+  padding: 1rem;
+  border-radius: 16px;
+  background-color: var(--branco);
+  box-shadow: 0 6px 24px rgb(0 0 0 / 0.25);
+  color: var(--roxo);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+}
+
+.whats-balao.is-aberto {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.whats-balao::after {          /* setinha apontando para o botão */
+  content: "";
+  position: absolute;
+  right: 20px;
+  bottom: -8px;
+  width: 16px;
+  height: 16px;
+  background-color: var(--branco);
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+
+.whats-balao__fechar {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  background: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--roxo);
+  cursor: pointer;
+}
+
+.whats-balao__titulo {
+  margin-bottom: 0.75rem;
+  padding-right: 1.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.whats-balao__opcao {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: 12px;
+  background-color: var(--rosa-claro);
+  font-size: 0.9375rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--roxo);
+  transition: background-color 0.2s ease;
+}
+
+.whats-balao__opcao + .whats-balao__opcao {
+  margin-top: 0.5rem;
+}
+
+.whats-balao__opcao:hover {
+  background-color: var(--rosa);
+  color: var(--branco);
+}
+
+.whats-balao__opcao .icone {
+  flex-shrink: 0;
+  width: 1.4em;
+  height: 1.4em;
+}
+
+.whats-flutuante--oculto {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+
+/* Carrinho: contador de quantidade, ação do card e barra do rodapé */
+.qtd {
+  display: inline-flex;
+  align-items: center;
+  height: 38px;
+  border: 2px solid var(--roxo);
+  border-radius: 200px;
+  color: var(--roxo);
+}
+
+.qtd__btn {
+  width: 28px;
+  height: 100%;
+  border: 0;
+  background: none;
+  font-family: var(--fonte-texto);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: inherit;
+  cursor: pointer;
+}
+
+.qtd output {
+  min-width: 24px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.card__acoes {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.4rem;
+}
+
+.card .card__acoes .btn {
+  flex: 1;
+  --btn-h: 38px;
+  --btn-fs: 0.875rem;
+  padding-inline: 0.4rem;
+  white-space: nowrap;
+}
+
+.card .card__acoes .btn.is-ok {
+  background-color: var(--rosa-texto);
+  color: var(--branco);
+}
+
+.carrinho-barra {
+  position: fixed;
+  inset: auto 0 0 0;
+  z-index: 41;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.75rem max(var(--gutter), calc((100% - var(--container)) / 2)) calc(0.75rem + env(safe-area-inset-bottom));
+  border-top: 3px solid var(--rosa);
+  background-color: var(--branco);
+  box-shadow: 0 -4px 16px rgb(0 0 0 / 0.15);
+  transform: translateY(100%);
+  visibility: hidden;
+  transition: transform 0.3s ease, visibility 0s linear 0.3s;
+}
+
+.carrinho-barra.is-visivel {
+  transform: none;
+  visibility: visible;
+  transition: transform 0.3s ease;
+}
+
+.carrinho-barra__resumo {
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--roxo);
+}
+
+.carrinho-barra__resumo strong {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.carrinho-barra .carrinho-barra__btn {
+  width: auto;
+  --btn-h: 48px;
+  --btn-fs: 1rem;
+  padding-inline: 1.75rem;
+}
+
+/* Com a barra visível: WhatsApp flutuante sobe e o fim da página ganha folga */
+body.tem-carrinho .whats-flutuante {
+  bottom: 5.5rem;
+}
+
+body.tem-carrinho .contato {
+  padding-bottom: 6.5rem;
+}
+
+/* Checkout offcanvas */
+.offcanvas--checkout {
+  width: min(440px, 100vw);
+  padding: 0;
+  background-color: var(--branco);
+  color: var(--roxo);
+}
+
+.checkout__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem 0.5rem 1.5rem;
+  background-color: var(--roxo);
+  color: var(--branco);
+}
+
+.checkout__topo h2 {
+  font-family: var(--fonte-titulo);
+  font-size: 2rem;
+  font-weight: 400;
+}
+
+.checkout__corpo {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1.25rem 1.5rem 2rem;
+}
+
+.checkout__vazio {
+  padding-block: 2rem;
+  text-align: center;
+}
+
+.pedido__item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem 0.75rem;
+  padding: 0.9rem 0;
+  border-bottom: 2px solid var(--rosa-claro);
+}
+
+.pedido__nome {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.pedido__detalhe {
+  margin-top: 0.15rem;
+  font-size: 0.8125rem;
+}
+
+.pedido__preco {
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.pedido__acoes {
+  display: flex;
+  grid-column: 1 / -1;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.pedido__remover {
+  border: 0;
+  background: none;
+  font-family: var(--fonte-texto);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--rosa-texto);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  cursor: pointer;
+}
+
+.pedido__resumo {
+  margin-block: 1rem 1.75rem;
+}
+
+.pedido__resumo div {
+  display: flex;
+  justify-content: space-between;
+  padding-block: 0.25rem;
+  font-size: 0.9375rem;
+}
+
+.pedido__resumo div[hidden] {
+  display: none;
+}
+
+.pedido__resumo .pedido__total {
+  margin-top: 0.4rem;
+  padding-top: 0.6rem;
+  border-top: 2px solid var(--rosa-claro);
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Formulário do checkout */
+.checkout__form h3 {
+  margin-bottom: 0.75rem;
+  font-family: var(--fonte-titulo);
+  font-size: 1.625rem;
+  font-weight: 400;
+  color: var(--rosa-texto);
+}
+
+.campo {
+  margin-bottom: 1rem;
+  border: 0;
+}
+
+.campo label,
+.campo legend {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.campo input[type="text"],
+.campo input[type="tel"],
+.campo input[type="email"],
+.campo input[type="date"],
+.campo input[type="search"],
+.campo select,
+.campo textarea {
+  width: 100%;
+  padding: 0.7rem 0.85rem;
+  border: 2px solid var(--rosa-claro);
+  border-radius: 12px;
+  background-color: var(--branco);
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  color: var(--roxo);
+}
+
+.campo textarea {
+  resize: vertical;
+}
+
+.campo input:focus,
+.campo select:focus,
+.campo textarea:focus {
+  border-color: var(--roxo);
+  outline: none;
+}
+
+.campo-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.campo--opcoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.campo--opcoes legend {
+  width: 100%;
+}
+
+.opcao {
+  position: relative;
+  cursor: pointer;
+}
+
+.campo .opcao {
+  margin-bottom: 0;
+}
+
+.opcao input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.opcao span {
+  display: block;
+  padding: 0.5rem 1.1rem;
+  border: 2px solid var(--roxo);
+  border-radius: 200px;
+  font-size: 0.9375rem;
+  font-weight: 700;
+  color: var(--roxo);
+}
+
+.opcao input:checked + span {
+  background-color: var(--roxo);
+  color: var(--branco);
+}
+
+.opcao input:focus-visible + span {
+  outline: 3px solid var(--rosa-texto);
+  outline-offset: 2px;
+}
+
+.campo__ajuda {
+  margin-top: 0.35rem;
+  margin-bottom: 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.campo > .campo__ajuda {
+  margin-bottom: 0;
+}
+
+.checkout__enviar {
+  --btn-h: 56px;
+  --btn-fs: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.checkout__enviar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.checkout__sucesso {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding-block: 1.5rem;
+  text-align: center;
+}
+
+.checkout__sucesso h3 {
+  font-family: var(--fonte-titulo);
+  font-size: 2rem;
+  font-weight: 400;
+  color: var(--rosa-texto);
+}
+
+.checkout__sucesso .btn {
+  --btn-h: 52px;
+  --btn-fs: 1.0625rem;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+
+/* 12c. VITRINES, CARDÁPIO COMPLETO E LOGO FLUTUANTE -------------------------- */
+
+/* Selo sobre a foto do card (Nº 1, Novo, Destaque da Kel) */
+.card__foto {
+  position: relative;
+}
+
+.card__selo {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  padding: 0.25rem 0.7rem;
+  border-radius: 200px;
+  background-color: var(--roxo);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--branco);
+  box-shadow: 0 2px 6px rgb(0 0 0 / 0.25);
+}
+
+.btn--branco {
+  background-color: var(--branco);
+  color: var(--roxo);
+}
+
+.btn--branco:hover {
+  filter: brightness(0.96);
+}
+
+/* Vitrines da landing: seções rosa com 3 cards */
+.vitrine {
+  background-color: var(--rosa);
+}
+
+.vitrine__sub {
+  margin-top: 0.5rem;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-align: center;
+  color: var(--branco);
+}
+
+.vitrine__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 300px);
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.vitrine .card__foto {
+  aspect-ratio: 4 / 3;
+}
+
+.vitrine__cta {
+  display: flex;
+  max-width: 306px;
+  margin: 1.75rem auto 0;
+  --btn-h: 56px;
+  --btn-fs: 1.125rem;
+}
+
+/* Logo que aparece no canto superior esquerdo depois do hero */
+.logo-flutuante {
+  position: fixed;
+  top: 1rem;
+  left: var(--gutter);
+  z-index: 34;
+  display: flex;
+  align-items: center;
+  height: 52px;
+  padding-inline: 0.9rem;
+  border-radius: 200px;
+  background-color: var(--branco);
+  box-shadow: 0 4px 12px rgb(0 0 0 / 0.25);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s;
+}
+
+.logo-flutuante.is-visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+body.painel-aberto .logo-flutuante {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.logo-flutuante img {
+  width: 100px;
+  height: auto;
+}
+
+/* Cardápio Completo: offcanvas de tela cheia que sobe de baixo */
+.offcanvas--cardapio {
+  inset: 0;
+  z-index: 40;
+  width: 100%;
+  padding: 0;
+  background-color: var(--rosa);
+  color: var(--branco);
+  transform: translateY(100%);
+}
+
+.offcanvas--cardapio.is-open {
+  transform: none;
+}
+
+.cardapio__topo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem max(var(--gutter), calc((100% - 1240px) / 2));
+}
+
+.cardapio__corpo {
+  display: grid;
+  flex: 1;
+  align-content: start;
+  gap: 1.25rem;
+  overflow-y: auto;
+  padding: 0.5rem max(var(--gutter), calc((100% - 1240px) / 2)) 3rem;
+}
+
+body.tem-carrinho .cardapio__corpo {
+  padding-bottom: 7rem;
+}
+
+/* Filtros (lateral esquerda no desktop; recolhível no celular) */
+.filtros {
+  padding: 1rem 1.25rem;
+  border-radius: 20px;
+  background-color: var(--branco);
+  color: var(--roxo);
+}
+
+.filtros__toggle {
+  display: block;
+  width: 100%;
+  padding: 0.4rem 0;
+  border: 0;
+  background: none;
+  font-family: var(--fonte-texto);
+  font-size: 1.0625rem;
+  font-weight: 700;
+  text-align: left;
+  color: var(--roxo);
+  cursor: pointer;
+}
+
+.filtros__toggle::after {
+  content: "+";
+  float: right;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--rosa-texto);
+}
+
+.filtros__toggle[aria-expanded="true"]::after {
+  content: "–";
+}
+
+.filtros__campos {
+  display: none;
+  margin-top: 0.75rem;
+}
+
+.filtros__campos.is-aberto {
+  display: block;
+}
+
+.filtros__grupo .filtros__opcao {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.3rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.filtros__opcao input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--roxo);
+}
+
+.filtros__limpar {
+  --btn-h: 44px;
+  --btn-fs: 0.9375rem;
+  border-color: var(--roxo);
+  color: var(--roxo);
+}
+
+.filtros__limpar:hover {
+  background-color: var(--roxo);
+}
+
+.cardapio__contagem {
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.cardapio__grade {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(228px, 1fr));
+  gap: 12px;
+}
+
+.cardapio__vazio {
+  padding-block: 2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+
+/* 12d. LIMPAR CARRINHO, BOTÃO FLUTUANTE DO CARDÁPIO, MAPA ------------------- */
+
+.carrinho-limpar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  height: 44px;
+  padding-inline: 0.8rem;
+  border: 2px solid var(--rosa-texto);
+  border-radius: 200px;
+  background: none;
+  font-family: var(--fonte-texto);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--rosa-texto);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.carrinho-limpar:hover,
+.carrinho-limpar.is-confirmando {
+  background-color: var(--rosa-texto);
+  color: var(--branco);
+}
+
+.carrinho-limpar--bloco {
+  width: 100%;
+  margin-bottom: 1.5rem;
+}
+
+.carrinho-barra__acoes {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+/* Na barra, só o ícone no celular; com texto a partir de 640px (ou ao confirmar) */
+.carrinho-barra .carrinho-limpar__texto {
+  display: none;
+}
+
+.carrinho-barra .carrinho-limpar.is-confirmando .carrinho-limpar__texto {
+  display: inline;
+}
+
+/* Confirmando no celular: o botão ganha a barra toda */
+.carrinho-barra.is-confirmando .carrinho-barra__resumo,
+.carrinho-barra.is-confirmando .carrinho-barra__btn {
+  display: none;
+}
+
+.carrinho-barra.is-confirmando {
+  justify-content: flex-end;
+}
+
+/* Botão flutuante do cardápio (canto inferior esquerdo) */
+.cardapio-flutuante {
+  position: fixed;
+  left: 1rem;
+  bottom: 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 52px;
+  padding-inline: 1.1rem;
+  border: 0;
+  border-radius: 200px;
+  background-color: var(--roxo);
+  box-shadow: 0 0 0 2px var(--branco), 0 4px 12px rgb(0 0 0 / 0.25);
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--branco);
+  cursor: pointer;
+  transition: transform 0.2s ease, opacity 0.2s ease, visibility 0.2s ease, bottom 0.3s ease;
+}
+
+.cardapio-flutuante:hover {
+  transform: translateY(-2px);
+}
+
+body.tem-carrinho .cardapio-flutuante {
+  bottom: 5.5rem;
+}
+
+body.painel-aberto .cardapio-flutuante {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.contato__endereco a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+
+/* 12e. ÍCONES, VOLTAR AO TOPO, ANIMAÇÕES, CARROSSEL ------------------------- */
+
+/* Sprite de ícones (escondido) e ícone em linha */
+.sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.icone {
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.btn,
+.carrinho-limpar {
+  gap: 0.55em;
+}
+
+.card .card__acoes .btn {
+  gap: 0.35em;
+}
+
+.card .card__acoes .btn .icone {
+  width: 1em;
+  height: 1em;
+}
+
+/* Voltar ao topo: ocupa o lugar do WhatsApp quando o rodapé aparece */
+.topo-flutuante {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: var(--roxo);
+  box-shadow: 0 0 0 2px var(--branco), 0 4px 12px rgb(0 0 0 / 0.25);
+  font-size: 1.5rem;
+  color: var(--branco);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(12px);
+  transition: opacity 0.25s ease, transform 0.25s ease, visibility 0s linear 0.25s, bottom 0.3s ease;
+}
+
+.topo-flutuante.is-visivel {
+  opacity: 1;
+  visibility: visible;
+  transform: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, bottom 0.3s ease;
+}
+
+body.tem-carrinho .topo-flutuante {
+  bottom: 5.5rem;
+}
+
+body.painel-aberto .topo-flutuante {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Cookie do hero: sobe de baixo para cima e balança de tempos em tempos.
+   A entrada usa "transform"; o balanço usa "rotate/translate" (propriedades independentes). */
+@media (prefers-reduced-motion: no-preference) {
+  .hero__cookie {
+    animation: cookie-entrada 1.1s cubic-bezier(0.2, 0.8, 0.2, 1) both,
+               cookie-balanco 7s ease-in-out 1.6s infinite;
+  }
+
+  .hero__circulo {
+    animation: circulo-entrada 0.8s ease-out both;
+  }
+
+  /* Fade-in das seções (classes aplicadas por main.js) */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.is-visivel {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes cookie-entrada {
+  from { opacity: 0; transform: translateY(90px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes circulo-entrada {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cookie-balanco {
+  0%, 78%, 100% { rotate: 0deg; translate: 0 0; }
+  82% { rotate: -5deg; translate: 0 -8px; }
+  86% { rotate: 4deg;  translate: 0 -4px; }
+  90% { rotate: -3deg; translate: 0 -6px; }
+  94% { rotate: 2deg;  translate: 0 -2px; }
+}
+
+/* Carrossel ao lado do card de sabores limitados */
+.limitados__grade {
+  display: grid;
+  gap: 1.5rem;
+  align-items: stretch;
+}
+
+.carrossel {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 20px;
+  background-color: var(--rosa-claro);
+}
+
+.carrossel__pista {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.carrossel__pista::-webkit-scrollbar {
+  display: none;
+}
+
+.carrossel__slide {
+  flex: 0 0 100%;
+  height: 100%;
+  scroll-snap-align: center;
+}
+
+.carrossel__slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carrossel__btn {
+  position: absolute;
+  top: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgb(255 255 255 / 0.9);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.25);
+  font-size: 1.25rem;
+  color: var(--roxo);
+  cursor: pointer;
+}
+
+.carrossel__btn--ant  { left: 0.75rem; }
+.carrossel__btn--prox { right: 0.75rem; }
+
+.carrossel__pontos {
+  position: absolute;
+  inset: auto 0 0.9rem 0;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.carrossel__ponto {
+  width: 11px;
+  height: 11px;
+  padding: 0;
+  border: 2px solid var(--branco);
+  border-radius: 50%;
+  background: rgb(0 0 0 / 0.25);
+  cursor: pointer;
+}
+
+.carrossel__ponto[aria-current="true"] {
+  background-color: var(--branco);
+}
+
+/* 13. BREAKPOINTS --------------------------------------------------------- */
+
+/* Tablet pequeno */
+@media (min-width: 640px) {
+  :root {
+    --gutter: 2rem;
+    --header-h: 190px;
+  }
+
+  .site-header__logo img {
+    width: 240px;
+  }
+
+
+  .limitados__card {
+    padding: 2.5rem 4rem 3rem;
+  }
+
+  .vitrine__grade {
+    grid-template-columns: repeat(2, minmax(0, 300px));
+  }
+
+  .carrinho-barra .carrinho-limpar__texto {
+    display: inline;
+  }
+
+  .carrinho-barra.is-confirmando .carrinho-barra__resumo {
+    display: block;
+  }
+
+  .carrinho-barra.is-confirmando .carrinho-barra__btn {
+    display: inline-flex;
+  }
+
+  .carrinho-barra.is-confirmando {
+    justify-content: space-between;
+  }
+
+  .canal img {
+    width: 68px;
+    height: 68px;
+  }
+}
+
+/* Tablet grande / desktop pequeno: layouts em duas colunas */
+@media (min-width: 900px) {
+  :root {
+    --header-h: 240px;
+  }
+
+  .site-header {
+    padding-top: 40px;
+  }
+
+  .site-header__logo img {
+    width: 300px;
+  }
+
+
+  /* 1. Hero: texto 465px à esquerda, círculo 386px à direita */
+  .hero__inner {
+    grid-template-columns: minmax(0, 465px) 386px;
+    justify-content: space-between;
+    text-align: left;
+  }
+
+  .hero__visual {
+    width: 386px;
+    margin: 0;
+  }
+
+  .hero__cookie {
+    top: -24.6%;
+    left: -9.3%;
+    width: 143.8%;
+  }
+
+  /* 2. Receita: 4 colunas de 228px */
+  .receita__lista {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0 10px;
+    margin-top: 3.5rem;
+  }
+
+  .ingrediente__visual {
+    margin-bottom: 1.5rem;
+  }
+
+  /* 4. Sobre: texto 465px + foto 386px */
+  .sobre__grade {
+    grid-template-columns: minmax(0, 465px) 386px;
+    justify-content: space-between;
+  }
+
+  .sobre__foto {
+    width: 386px;
+    margin: 0;
+  }
+
+  /* 6. Revendedor: círculo 465px + conteúdo 386px, mesma altura */
+  .revendedor__grade {
+    grid-template-columns: 465px 386px;
+    justify-content: space-between;
+    align-items: stretch;
+    margin-top: 3rem;
+  }
+
+  .revendedor__visual {
+    width: 465px;
+    margin: 0;
+  }
+
+  .revendedor__conteudo {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .revendedor__intro {
+    margin-bottom: 1.5rem;
+  }
+
+  .passos {
+    gap: 1rem;
+  }
+
+  .passo {
+    grid-template-columns: 56px 1fr;
+  }
+
+  .passo__numero {
+    width: 56px;
+    height: 56px;
+    font-size: 2.25rem;
+  }
+
+  /* 7. Contato: duas colunas (telefone | e-mail) */
+  .contato__canais {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contato__container {
+    gap: 1.75rem;
+  }
+
+  .rodape__logo {
+    width: 150px;
+  }
+
+  .rodape__social {
+    align-items: flex-end;
+  }
+
+  /* Cardápio: filtros à esquerda, grade à direita */
+  .cardapio__corpo {
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+  }
+
+  .filtros {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    padding: 1.5rem 1.25rem;
+  }
+
+  .filtros__toggle {
+    pointer-events: none;
+    margin-bottom: 0.5rem;
+    cursor: default;
+  }
+
+  .filtros__toggle::after {
+    content: none !important;
+  }
+
+  .filtros__campos {
+    display: block;
+  }
+
+  /* Sabores limitados: carrossel à esquerda + card à direita (940px no total) */
+  .limitados__grade {
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+
+  .carrossel {
+    aspect-ratio: auto;
+    min-height: 420px;
+  }
+
+  /* Vitrines: 3 cards ocupando toda a largura padrão do conteúdo */
+  .vitrine__grade {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+
+  /* Depoimentos: 3 colunas */
+  .depoimentos__lista {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .whats-flutuante {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
+
+  body.tem-carrinho .whats-flutuante,
+  body.tem-carrinho .topo-flutuante,
+  body.tem-carrinho .cardapio-flutuante {
+    bottom: 6rem;
+  }
+
+  .topo-flutuante {
+    right: 1.5rem;
+    bottom: 1.5rem;
+  }
+
+  .cardapio-flutuante {
+    left: 1.5rem;
+    bottom: 1.5rem;
+  }
+
+  .mapa {
+    aspect-ratio: 940 / 267;
+  }
+
+  .rodape__redes {
+    gap: 10px;
+  }
+
+  .rodape__redes img {
+    width: 69px;
+    height: 69px;
+  }
+
+  .btn--grande {
+    --btn-h: 80px;
+  }
+
+  .hero__texto .btn {
+    --btn-h: 72px;
+  }
+
+  .limitados__card {
+    padding: 2rem 2.25rem 2.25rem;
+  }
+
+  .limitados__card .titulo {
+    max-width: none;
+    margin-bottom: 1.25rem;
+  }
+}
+
+/* 14. ACESSIBILIDADE ------------------------------------------------------ */
+:focus-visible {
+  outline: 3px solid var(--roxo);
+  outline-offset: 3px;
+}
+
+.offcanvas--menu :focus-visible,
+.cardapio__topo :focus-visible,
+.hero :focus-visible,
+.vitrine :focus-visible,
+.contato :focus-visible {
+  outline-color: var(--branco);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn,
+  .rodape__redes img,
+  .whats-flutuante,
+  .menu-toggle,
+  .offcanvas,
+  .offcanvas__fundo,
+  .tamanho-opcao span,
+  .whats-balao,
+  .topo-flutuante,
+  .carrinho-limpar,
+  .cardapio-flutuante,
+  .carrinho-barra,
+  .logo-flutuante,
+  .offcanvas--cardapio {
+    transition: none;
+  }
+}

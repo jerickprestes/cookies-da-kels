@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#E790A3">
+  <title>Cookies da Kels | Cookies artesanais feitos com amor</title>
+  <meta name="description" content="Cookies da Kels: cookies artesanais com manteiga fresca, chocolate premium e muito amor. Escolha seu sabor e peça pelo WhatsApp.">
+
+  <link rel="stylesheet" href="main.css">
+</head>
+<body>
+
+  <svg class="sprite" aria-hidden="true" focusable="false">
+    <defs>
+      <symbol id="i-cardapio" viewBox="0 0 24 24"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></symbol>
+      <symbol id="i-carrinho" viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 1.96-1.61L23 6H6"/></symbol>
+      <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><path d="M17.5 6.5h.01"/></symbol>
+      <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></symbol>
+      <symbol id="i-enviar" viewBox="0 0 24 24"><path d="M22 2 11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></symbol>
+      <symbol id="i-loja" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></symbol>
+      <symbol id="i-lixo" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+      <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
+      <symbol id="i-seta-cima" viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></symbol>
+      <symbol id="i-seta-esq" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></symbol>
+      <symbol id="i-seta-dir" viewBox="0 0 24 24"><path d="M9 18l6-6-6-6"/></symbol>
+    </defs>
+  </svg>
+
+  
+  <!--
+    PROJETO DE ESTUDO: cidade, preços, depoimentos, perfis de redes sociais e demais
+    dados são fictícios.
+  -->
+
+  <!-- Logo + botão do menu: ficam sobre a faixa branca do topo da primeira seção -->
+  <header class="site-header">
+    <a href="#inicio" class="site-header__logo">
+      <img src="assets/logo.png" alt="Cookies da Kels" width="300" height="122">
+    </a>
+
+    <button class="menu-toggle" type="button" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu-offcanvas">
+      <span class="menu-toggle__barras" aria-hidden="true"></span>
+    </button>
+  </header>
+
+  <!-- Logo flutuante: aparece quando o hero sai da tela -->
+  <a class="logo-flutuante" href="#inicio" aria-label="Voltar ao topo">
+    <img src="assets/logo.png" alt="Cookies da Kels" width="110" height="45">
+  </a>
+
+  <!-- Menu offcanvas: painel lateral aberto pelo botão do cabeçalho -->
+  <nav class="offcanvas offcanvas--menu" id="menu-offcanvas" aria-label="Principal">
+    <button class="offcanvas__fechar" type="button" aria-label="Fechar menu">&times;</button>
+    <ul>
+      <li><button class="js-abrir-cardapio" type="button">Cardápio</button></li>
+      <li><a href="#revendedor">Revendedor</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </nav>
+  <div class="offcanvas__fundo"></div>
+
+  <!-- Cardápio Completo: offcanvas de tela cheia que sobe de baixo; todos os sabores ficam só aqui -->
+  <aside class="offcanvas offcanvas--cardapio" id="cardapio" role="dialog" aria-modal="true" aria-labelledby="cardapio-titulo">
+    <div class="cardapio__topo">
+      <h2 class="titulo titulo--branco" id="cardapio-titulo">Cardápio Completo</h2>
+      <button class="offcanvas__fechar" type="button" aria-label="Fechar cardápio">&times;</button>
+    </div>
+
+    <div class="cardapio__corpo">
+      <form class="filtros" id="filtros" aria-label="Filtros do cardápio">
+        <button class="filtros__toggle" id="filtros-toggle" type="button" aria-expanded="false" aria-controls="filtros-campos">Filtros</button>
+
+        <div class="filtros__campos" id="filtros-campos">
+          <div class="campo">
+            <label for="filtro-busca">Buscar sabor</label>
+            <input type="search" id="filtro-busca" placeholder="Ex.: chocolate">
+          </div>
+
+          <fieldset class="campo filtros__grupo">
+            <legend>Categoria</legend>
+            <div id="filtro-categorias"></div>
+          </fieldset>
+
+          <fieldset class="campo filtros__grupo">
+            <legend>Preço (tamanho P)</legend>
+            <label class="filtros__opcao"><input type="radio" name="faixa" value="" checked> Todos</label>
+            <label class="filtros__opcao"><input type="radio" name="faixa" value="ate13"> Até R$ 13</label>
+            <label class="filtros__opcao"><input type="radio" name="faixa" value="14a15"> R$ 14 a R$ 15</label>
+            <label class="filtros__opcao"><input type="radio" name="faixa" value="16mais"> R$ 16 ou mais</label>
+          </fieldset>
+
+          <div class="campo">
+            <label for="filtro-ordem">Ordenar por</label>
+            <select id="filtro-ordem">
+              <option value="relevancia">Relevância</option>
+              <option value="menor">Menor preço</option>
+              <option value="maior">Maior preço</option>
+              <option value="az">Nome (A–Z)</option>
+            </select>
+          </div>
+
+          <button class="btn btn--contorno filtros__limpar" type="reset"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-lixo"/></svg>Limpar filtros</button>
+        </div>
+      </form>
+
+      <div class="cardapio__lista">
+        <p class="cardapio__contagem" id="cardapio-contagem" role="status" aria-live="polite"></p>
+        <div class="cardapio__grade" id="cardapio-grade"></div>
+        <p class="cardapio__vazio" id="cardapio-vazio" hidden>Nenhum sabor encontrado. Tente limpar os filtros.</p>
+
+        <div class="cardapio__rodape">
+          <p>Pedido mínimo: 1 pacote (tamanho P). Combos e caixas: consulte pelo WhatsApp.</p>
+          <p>Sabor do mês: Churros com Doce de Leite, até 30/11. <a href="#limitados">Ver o sabor do mês</a></p>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Checkout offcanvas: revisão do pedido + dados do cliente; envia a mensagem ao WhatsApp -->
+  <aside class="offcanvas offcanvas--checkout" id="checkout" role="dialog" aria-modal="true" aria-labelledby="checkout-titulo">
+    <div class="checkout__topo">
+      <h2 id="checkout-titulo">Seu pedido</h2>
+      <button class="offcanvas__fechar" type="button" aria-label="Fechar pedido">&times;</button>
+    </div>
+
+    <div class="checkout__corpo">
+      <p class="checkout__vazio" id="checkout-vazio">Seu carrinho está vazio. Escolha um sabor e toque em Adicionar.</p>
+
+      <div id="checkout-conteudo" hidden>
+        <ul class="pedido__lista" id="pedido-lista"></ul>
+
+        <dl class="pedido__resumo">
+          <div>
+            <dt>Subtotal</dt>
+            <dd id="resumo-subtotal">R$0,00</dd>
+          </div>
+          <div id="resumo-entrega-linha">
+            <dt>Entrega (Itapuã)</dt>
+            <dd id="resumo-entrega">R$6,00</dd>
+          </div>
+          <div class="pedido__total">
+            <dt>Total</dt>
+            <dd id="resumo-total">R$0,00</dd>
+          </div>
+        </dl>
+
+        <button class="carrinho-limpar carrinho-limpar--bloco js-limpar-carrinho" type="button" data-rotulo="Limpar carrinho" aria-label="Limpar carrinho">
+          <svg class="carrinho-limpar__icone" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></svg>
+          <span class="carrinho-limpar__texto">Limpar carrinho</span>
+        </button>
+
+        <form class="checkout__form" id="form-pedido">
+          <h3>Seus dados</h3>
+
+          <div class="campo">
+            <label for="f-nome">Nome</label>
+            <input type="text" id="f-nome" name="nome" autocomplete="name" required>
+          </div>
+
+          <div class="campo">
+            <label for="f-tel">WhatsApp</label>
+            <input type="tel" id="f-tel" name="telefone" autocomplete="tel" inputmode="tel" placeholder="(27) 99999-9999" pattern="(?:\+?55\s?)?\(?\d{2}\)?\s?9?\d{4}[\s\-]?\d{4}" title="Informe o DDD e o número, por exemplo (27) 99999-9999" required>
+          </div>
+
+          <fieldset class="campo campo--opcoes">
+            <legend>Como você quer receber?</legend>
+            <label class="opcao"><input type="radio" name="receber" value="entrega" checked><span>Entrega</span></label>
+            <label class="opcao"><input type="radio" name="receber" value="retirada"><span>Retirada</span></label>
+          </fieldset>
+
+          <div id="campos-entrega">
+            <div class="campo">
+              <label for="f-rua">Rua e número</label>
+              <input type="text" id="f-rua" name="rua" autocomplete="street-address">
+            </div>
+            <div class="campo-dupla">
+              <div class="campo">
+                <label for="f-bairro">Bairro</label>
+                <input type="text" id="f-bairro" name="bairro" value="Itapuã">
+              </div>
+              <div class="campo">
+                <label for="f-compl">Complemento</label>
+                <input type="text" id="f-compl" name="complemento" placeholder="Opcional">
+              </div>
+            </div>
+            <p class="campo__ajuda">Entregamos em Itapuã, Vila Velha (ES). Taxa de R$ 6,00.</p>
+          </div>
+
+          <p class="campo__ajuda" id="campo-retirada" hidden>Retirada em Itapuã. Combinamos o local pelo WhatsApp.</p>
+
+          <div class="campo">
+            <label for="f-data">Data desejada</label>
+            <input type="date" id="f-data" name="data" required>
+            <p class="campo__ajuda">Encomendas com 2 dias de antecedência.</p>
+          </div>
+
+          <fieldset class="campo campo--opcoes">
+            <legend>Forma de pagamento</legend>
+            <label class="opcao"><input type="radio" name="pagamento" value="Pix" checked><span>Pix</span></label>
+            <label class="opcao"><input type="radio" name="pagamento" value="Cartão"><span>Cartão</span></label>
+            <label class="opcao"><input type="radio" name="pagamento" value="Dinheiro"><span>Dinheiro</span></label>
+          </fieldset>
+
+          <div class="campo" id="campo-troco" hidden>
+            <label for="f-troco">Troco para quanto?</label>
+            <input type="text" id="f-troco" name="troco" inputmode="decimal" placeholder="Opcional, ex.: R$ 50,00">
+          </div>
+
+          <div class="campo">
+            <label for="f-obs">Observações</label>
+            <textarea id="f-obs" name="observacoes" rows="3" placeholder="Opcional, ex.: recado para o presente"></textarea>
+          </div>
+
+          <button class="btn btn--roxo checkout__enviar" id="btn-enviar" type="submit"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-enviar"/></svg>Enviar pedido pelo WhatsApp</button>
+          <p class="campo__ajuda">Ao enviar, abrimos o WhatsApp com o pedido pronto. O pagamento é combinado na conversa.</p>
+        </form>
+      </div>
+
+      <div class="checkout__sucesso" id="checkout-sucesso" hidden>
+        <h3 tabindex="-1">Pedido pronto!</h3>
+        <p>Abrimos o WhatsApp com o seu pedido. Falta só enviar a mensagem para a Kel confirmar.</p>
+        <a class="btn btn--roxo" id="link-whats-pedido" href="https://wa.me/5527900001234" target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>Abrir o WhatsApp de novo</a>
+        <button class="btn btn--contorno" id="btn-sucesso-fechar" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-x"/></svg>Fechar</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Inscrição de revendedor: offcanvas com formulário que envia os dados ao WhatsApp -->
+  <aside class="offcanvas offcanvas--checkout offcanvas--revenda" id="revenda" role="dialog" aria-modal="true" aria-labelledby="revenda-titulo">
+    <div class="checkout__topo">
+      <h2 id="revenda-titulo">Quero revender</h2>
+      <button class="offcanvas__fechar" type="button" aria-label="Fechar inscrição">&times;</button>
+    </div>
+
+    <div class="checkout__corpo">
+      <form class="checkout__form" id="form-revenda">
+        <p class="campo__ajuda">Conte um pouco sobre você ou seu negócio. Enviamos a inscrição pelo WhatsApp e respondemos com a tabela de preços e as condições.</p>
+
+        <div class="campo">
+          <label for="r-nome">Nome</label>
+          <input type="text" id="r-nome" name="nome" autocomplete="name" required>
+        </div>
+
+        <div class="campo">
+          <label for="r-tel">WhatsApp</label>
+          <input type="tel" id="r-tel" name="telefone" autocomplete="tel" inputmode="tel" placeholder="(27) 99999-9999" pattern="(?:\+?55\s?)?\(?\d{2}\)?\s?9?\d{4}[\s\-]?\d{4}" title="Informe o DDD e o número, por exemplo (27) 99999-9999" required>
+        </div>
+
+        <div class="campo">
+          <label for="r-email">E-mail</label>
+          <input type="email" id="r-email" name="email" autocomplete="email" placeholder="Opcional">
+        </div>
+
+        <div class="campo">
+          <label for="r-cidade">Cidade e bairro</label>
+          <input type="text" id="r-cidade" name="cidade" placeholder="Ex.: Itapuã, Vila Velha" required>
+        </div>
+
+        <div class="campo">
+          <label for="r-tipo">Como você pretende revender?</label>
+          <select id="r-tipo" name="tipo" required>
+            <option value="">Selecione</option>
+            <option>Pessoa física (vendas por conta própria)</option>
+            <option>Cafeteria ou padaria</option>
+            <option>Loja ou mercado</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="r-volume">Volume estimado por mês</label>
+          <select id="r-volume" name="volume" required>
+            <option value="">Selecione</option>
+            <option>Até 20 unidades</option>
+            <option>De 20 a 50 unidades</option>
+            <option>Mais de 50 unidades</option>
+          </select>
+        </div>
+
+        <div class="campo">
+          <label for="r-msg">Mensagem</label>
+          <textarea id="r-msg" name="mensagem" rows="3" placeholder="Opcional"></textarea>
+        </div>
+
+        <button class="btn btn--roxo checkout__enviar" type="submit"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-enviar"/></svg>Enviar inscrição pelo WhatsApp</button>
+        <p class="campo__ajuda">Ao enviar, abrimos o WhatsApp com a inscrição pronta.</p>
+      </form>
+
+      <div class="checkout__sucesso" id="revenda-sucesso" hidden>
+        <h3 tabindex="-1">Inscrição pronta!</h3>
+        <p>Abrimos o WhatsApp com os seus dados. Falta só enviar a mensagem para a Kel.</p>
+        <a class="btn btn--roxo" id="link-whats-revenda" href="https://wa.me/5527900001234" target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>Abrir o WhatsApp de novo</a>
+        <button class="btn btn--contorno" id="btn-revenda-fechar" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-x"/></svg>Fechar</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Barra flutuante do carrinho: aparece quando há itens -->
+  <div class="carrinho-barra" role="region" aria-label="Resumo do pedido">
+    <p class="carrinho-barra__resumo"><span class="js-barra-qtd">0 itens</span> · <strong class="js-barra-total">R$0,00</strong></p>
+    <div class="carrinho-barra__acoes">
+      <button class="carrinho-limpar js-limpar-carrinho" type="button" data-rotulo="Limpar" aria-label="Limpar carrinho">
+        <svg class="carrinho-limpar__icone" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14M10 10v6M14 10v6"/></svg>
+        <span class="carrinho-limpar__texto">Limpar</span>
+      </button>
+      <button class="btn btn--roxo carrinho-barra__btn js-abrir-checkout" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-carrinho"/></svg>Ver pedido</button>
+    </div>
+  </div>
+
+  <!-- Avisos para leitores de tela -->
+  <p class="visually-hidden" id="carrinho-status" role="status" aria-live="polite"></p>
+
+  <main>
+
+    <!-- ============ 1. APRESENTAÇÃO E CTA ============ -->
+    <section class="section hero has-wave has-wave--branca" id="inicio" aria-labelledby="hero-titulo">
+      <div class="container hero__inner">
+        <div class="hero__texto">
+          <h1 class="titulo" id="hero-titulo">Cookies artesanais em Vila Velha: peça o seu e fique à vontade!</h1>
+          <p>Seja muito bem-vindo ao Cookies da Kels. Nossa paixão é adoçar a sua vida com nossos cookies deliciosos e feitos especialmente para transformar seus momentos em doces lembranças. Peça e delicie-se.</p>
+          <p class="hero__info">A partir de R$12 · entrega em Itapuã · encomendas com 2 dias de antecedência</p>
+          <button type="button" class="btn btn--roxo js-abrir-cardapio"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-cardapio"/></svg>Ver cardápio</button>
+        </div>
+
+        <div class="hero__visual">
+          <div class="hero__circulo" aria-hidden="true"></div>
+          <img class="hero__cookie" src="assets/cookie-hero.webp" alt="Cookie com gotas de chocolate" width="555" height="555">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 2. INGREDIENTES (receita secreta) ============ -->
+    <section class="section receita has-wave has-wave--rosa" aria-labelledby="receita-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--rosa titulo--centro" id="receita-titulo">Os ingredientes que usamos</h2>
+
+        <ul class="receita__lista">
+          <li class="ingrediente">
+            <div class="ingrediente__visual">
+              <img class="ingrediente__img ingrediente__img--manteiga" src="assets/manteiga.png" alt="Manteiga fresca" width="490" height="448">
+            </div>
+            <h3>Manteiga fresca:</h3>
+            <p>Cremosidade na medida certa</p>
+            <p class="ingrediente__prova">Manteiga de verdade, sem margarina</p>
+          </li>
+
+          <li class="ingrediente">
+            <div class="ingrediente__visual">
+              <img class="ingrediente__img ingrediente__img--chocolate" src="assets/chocolate.png" alt="Chocolate premium" width="300" height="348">
+            </div>
+            <h3>Chocolate Premium:</h3>
+            <p>Equilíbrio de sabor</p>
+            <p class="ingrediente__prova">Chocolate com 40% de cacau e ao leite</p>
+          </li>
+
+          <li class="ingrediente">
+            <div class="ingrediente__visual">
+              <img class="ingrediente__img ingrediente__img--ingredientes" src="assets/ingredientes.png" alt="Ovos, gotas de chocolate e limão" width="500" height="451">
+            </div>
+            <h3>Ingredientes frescos:</h3>
+            <p>Aroma e qualidade</p>
+            <p class="ingrediente__prova">Assado no dia do seu pedido</p>
+          </li>
+
+          <li class="ingrediente">
+            <div class="ingrediente__visual">
+              <img class="ingrediente__img ingrediente__img--luvas" src="assets/luvas.png" alt="Luvas de cozinha em formato de coração" width="500" height="511">
+            </div>
+            <h3>Amor:</h3>
+            <p>Nosso ingrediente secreto</p>
+          </li>
+        </ul>
+
+        <p class="receita__aviso"><strong>Alergênicos:</strong> contém leite, ovos, glúten e avelã (no recheio de Nutella). Pode conter traços de amendoim e soja.</p>
+
+        <button type="button" class="btn btn--roxo receita__cta js-abrir-cardapio"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-cardapio"/></svg>Ver cardápio</button>
+      </div>
+    </section>
+
+    <!-- ============ 3. MAIS VENDIDOS (cards gerados por main.js a partir de catalogo.js) ============ -->
+    <section class="section vitrine has-wave has-wave--branca" id="mais-vendidos" aria-labelledby="mais-vendidos-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--branco titulo--centro" id="mais-vendidos-titulo">Mais vendidos</h2>
+        <p class="vitrine__sub">Os queridinhos de quem já provou.</p>
+        <div class="vitrine__grade" data-vitrine="mais-vendido"></div>
+        <button class="btn btn--branco vitrine__cta js-abrir-cardapio" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-cardapio"/></svg>Ver cardápio completo</button>
+      </div>
+    </section>
+
+    <!-- ============ 4. SOBRE A KEL ============ -->
+    <section class="section sobre has-wave has-wave--rosa" aria-labelledby="sobre-titulo">
+      <div class="container sobre__grade">
+        <div class="sobre__texto">
+          <h2 class="titulo titulo--rosa" id="sobre-titulo">Oi, eu sou a Kel</h2>
+          <p class="sobre__fato">Em Vila Velha (ES), desde 2021, assando cookies à mão, em cozinha própria.</p>
+          <p>Na busca por alegria, entrelacei afeto e sabor em Cookies, para envolver os sentidos e adoçar vidas! Nossas criações são a manifestação do lar, perfumando o cotidiano com um sabor singular.</p>
+          <p>Moldando momentos com nossos cookies irresistíveis, convido você a vivenciar o encanto de cada mordida e transformar instantes em lembranças inesquecíveis. <strong>Seja bem-vindo à nossa jornada de doçura!</strong></p>
+          <p class="sobre__assinatura">Kel (Rachel)</p>
+        </div>
+
+        <div class="sobre__foto">
+          <img src="assets/kel.jpg" alt="Kel, criadora do Cookies da Kels" width="900" height="1200">
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 5. DESTAQUES ============ -->
+    <section class="section vitrine has-wave has-wave--branca" id="destaques" aria-labelledby="destaques-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--branco titulo--centro" id="destaques-titulo">Destaques</h2>
+        <p class="vitrine__sub">As escolhas da Kel para você experimentar.</p>
+        <div class="vitrine__grade" data-vitrine="destaque"></div>
+        <button class="btn btn--branco vitrine__cta js-abrir-cardapio" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-cardapio"/></svg>Ver cardápio completo</button>
+      </div>
+    </section>
+
+    <!-- ============ 6. DEPOIMENTOS ============ -->
+    <section class="section depoimentos has-wave has-wave--rosa" id="depoimentos" aria-labelledby="depoimentos-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--rosa titulo--centro" id="depoimentos-titulo">Quem já provou</h2>
+
+        <ul class="depoimentos__lista">
+          <li>
+            <figure class="depoimento">
+              <blockquote><p>Chegou fresquinho e no prazo. O Tradicional com Nutella some da mesa em minutos!</p></blockquote>
+              <figcaption>— Mariana S., Itapuã</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure class="depoimento">
+              <blockquote><p>Pedi o Triple Chocolate para o aniversário da minha filha e foi sucesso total.</p></blockquote>
+              <figcaption>— Rafael P., Praia da Costa</figcaption>
+            </figure>
+          </li>
+          <li>
+            <figure class="depoimento">
+              <blockquote><p>Dá para sentir a manteiga de verdade. O Red Velvet é o meu favorito.</p></blockquote>
+              <figcaption>— Camila A., Itaparica</figcaption>
+            </figure>
+          </li>
+        </ul>
+
+        <a class="btn btn--contorno depoimentos__cta" href="https://www.instagram.com/cookiesdakels.estudo" target="_blank" rel="noopener" aria-label="Ver mais depoimentos no Instagram"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-instagram"/></svg>Ver mais no Instagram</a>
+      </div>
+    </section>
+
+    <!-- ============ 6. SABORES LIMITADOS ============ -->
+    <section class="section limitados has-wave has-wave--branca" id="limitados" aria-labelledby="limitados-titulo">
+      <div class="container limitados__grade">
+        <div class="carrossel" id="carrossel" role="region" aria-roledescription="carrossel" aria-label="Fotos dos sabores limitados">
+          <ul class="carrossel__pista" id="carrossel-pista">
+            <li class="carrossel__slide" role="group" aria-roledescription="slide" aria-label="1 de 4"><img src="assets/cookie-tradicional.jpg" alt="Cookie tradicional ao lado de um copo de leite" width="640" height="957"></li>
+            <li class="carrossel__slide" role="group" aria-roledescription="slide" aria-label="2 de 4"><img src="assets/cookie-triple.jpg" alt="Cookies de chocolate sobre uma tábua de madeira" width="640" height="960"></li>
+            <li class="carrossel__slide" role="group" aria-roledescription="slide" aria-label="3 de 4"><img src="assets/cookie-redvelvet.jpg" alt="Pilha de cookies claros com limões ao fundo" width="640" height="942"></li>
+            <li class="carrossel__slide" role="group" aria-roledescription="slide" aria-label="4 de 4"><img src="assets/cookie-nutella.jpg" alt="Cookies recheados sobre tábua, com ovos e colher" width="640" height="957"></li>
+          </ul>
+          <button class="carrossel__btn carrossel__btn--ant" type="button" aria-label="Foto anterior"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-seta-esq"/></svg></button>
+          <button class="carrossel__btn carrossel__btn--prox" type="button" aria-label="Próxima foto"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-seta-dir"/></svg></button>
+          <div class="carrossel__pontos" id="carrossel-pontos"></div>
+        </div>
+
+        <div class="limitados__card">
+          <h2 class="titulo titulo--rosa titulo--centro" id="limitados-titulo">Sabores Limitados!</h2>
+
+          <p class="limitados__destaque"><strong>Sabor deste mês:</strong> Churros com Doce de Leite · até 30/11 · 40 unidades</p>
+
+          <p>Todo mês disponibilizamos um sabor surpresa para você! Imagina ser surpreendido no seu cafezinho da tarde com um cookie totalmente diferente dos que você já está acostumado?</p>
+          <p><strong>Você pode checar nossos novos sabores diretamente pelo nosso Instagram. É fácil, rápido e muito, mas muito delicioso (a melhor parte, é claro).</strong></p>
+
+          <div class="limitados__acoes">
+            <a class="btn btn--roxo" href="https://www.instagram.com/cookiesdakels.estudo" target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-instagram"/></svg>Ver o sabor do mês no Instagram</a>
+            <a class="btn btn--contorno" href="https://wa.me/5527900001234?text=Ol%C3%A1!%20Quero%20reservar%20o%20sabor%20surpresa%20do%20m%C3%AAs." target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>Reservar pelo WhatsApp</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 7. SEJA UM REVENDEDOR ============ -->
+    <section class="section revendedor has-wave has-wave--rosa" id="revendedor" aria-labelledby="revendedor-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--rosa titulo--centro" id="revendedor-titulo">Seja um revendedor ou revendedora</h2>
+
+        <div class="revendedor__grade">
+          <figure class="revendedor__visual">
+            <div class="revendedor__moldura">
+              <div class="revendedor__circulo" aria-hidden="true"></div>
+              <img class="revendedor__cracha" src="assets/cracha.png" alt="Crachá de revendedora Cookies da Kels" width="307" height="443">
+            </div>
+            <figcaption class="revendedor__legenda">Exemplo de crachá</figcaption>
+          </figure>
+
+          <div class="revendedor__conteudo">
+            <p class="revendedor__intro">Venda cookies artesanais no seu negócio, com produto e embalagem prontos.</p>
+
+            <ol class="passos">
+              <li class="passo">
+                <span class="passo__numero" aria-hidden="true">1</span>
+                <p>Chame a gente no WhatsApp.</p>
+              </li>
+              <li class="passo">
+                <span class="passo__numero" aria-hidden="true">2</span>
+                <p>Receba a tabela de preços e as condições.</p>
+              </li>
+              <li class="passo">
+                <span class="passo__numero" aria-hidden="true">3</span>
+                <p>Faça o primeiro pedido e receba produto e embalagem.</p>
+              </li>
+            </ol>
+
+            <dl class="condicoes">
+              <div>
+                <dt>Pedido mínimo</dt>
+                <dd>20 unidades</dd>
+              </div>
+              <div>
+                <dt>Desconto ou margem</dt>
+                <dd>25% sobre o preço de venda</dd>
+              </div>
+              <div>
+                <dt>Quem pode revender</dt>
+                <dd>pessoas físicas, cafeterias e lojas</dd>
+              </div>
+              <div>
+                <dt>O que vem incluso</dt>
+                <dd>cookies embalados e material de divulgação</dd>
+              </div>
+            </dl>
+
+            <button class="btn btn--roxo revendedor__cta js-abrir-revenda" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-loja"/></svg>Quero revender</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. LANÇAMENTOS ============ -->
+    <section class="section vitrine has-wave has-wave--branca" id="lancamentos" aria-labelledby="lancamentos-titulo">
+      <div class="container">
+        <h2 class="titulo titulo--branco titulo--centro" id="lancamentos-titulo">Lançamentos</h2>
+        <p class="vitrine__sub">Sabores novinhos, saindo do forno.</p>
+        <div class="vitrine__grade" data-vitrine="lancamento"></div>
+        <button class="btn btn--branco vitrine__cta js-abrir-cardapio" type="button"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-cardapio"/></svg>Ver cardápio completo</button>
+      </div>
+    </section>
+
+    <!-- ============ 10. PERGUNTAS FREQUENTES ============ -->
+    <section class="section faq has-wave has-wave--rosa" id="faq" aria-labelledby="faq-titulo">
+      <div class="container faq__container">
+        <h2 class="titulo titulo--rosa titulo--centro" id="faq-titulo">Perguntas frequentes</h2>
+
+        <div class="faq__lista">
+          <details class="faq__item" open>
+            <summary>Quais são os alergênicos?</summary>
+            <p>Contém leite, ovos, glúten e avelã (no recheio de Nutella). Pode conter traços de amendoim e soja.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Quanto tempo o cookie dura?</summary>
+            <p>7 dias em temperatura ambiente, na embalagem fechada.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Como é a entrega?</summary>
+            <p>Entregamos em Itapuã, em Vila Velha. Taxa: R$ 6,00. Prazo: 2 dias. Retirada: sim, em Itapuã, combinada pelo WhatsApp.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Aceita Pix?</summary>
+            <p>Aceitamos Pix, cartão de crédito e débito e dinheiro.</p>
+          </details>
+          <details class="faq__item">
+            <summary>Faço encomenda para evento?</summary>
+            <p>Sim. Pedido mínimo de 30 unidades, com 5 dias de antecedência. Chame a gente no WhatsApp.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ 9. CONTATO ============ -->
+    <section class="section contato" id="contato" aria-labelledby="contato-titulo">
+      <div class="container contato__container">
+        <h2 class="titulo titulo--branco titulo--centro" id="contato-titulo">Entre em contato</h2>
+
+        <p class="contato__horario">Atendemos de segunda a sexta das 9h às 18h. Respondemos em até 2 horas.</p>
+
+        <div class="contato__canais">
+          <a class="canal" href="https://wa.me/5527900001234" target="_blank" rel="noopener">
+            <img src="assets/contact-whatsapp.svg" alt="" width="68" height="68">
+            <span>WhatsApp: +55 (27) 90000-1234</span>
+          </a>
+          <a class="canal" href="mailto:contato@cookiesdakels.example">
+            <img src="assets/contact-email.svg" alt="" width="69" height="69">
+            <span>contato@cookiesdakels.example</span>
+          </a>
+        </div>
+
+        <div class="contato__local">
+          <div class="mapa">
+            <iframe src="https://maps.google.com/maps?q=Itapu%C3%A3%2C%20Vila%20Velha%20-%20ES&amp;z=14&amp;hl=pt-BR&amp;output=embed" title="Mapa de Itapuã, Vila Velha (ES)" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
+          <p class="contato__endereco">Atendemos Itapuã, em Vila Velha (ES). <a href="https://www.google.com/maps/search/?api=1&amp;query=Itapu%C3%A3%2C%20Vila%20Velha%20-%20ES" target="_blank" rel="noopener">Abrir no Google Maps</a></p>
+        </div>
+
+        <div class="rodape">
+          <img class="rodape__logo" src="assets/logo-negativo.png" alt="Cookies da Kels" width="150" height="61">
+
+          <div class="rodape__social">
+            <p class="rodape__arroba">Instagram: @cookiesdakels.estudo</p>
+            <ul class="rodape__redes">
+              <li><a href="https://www.instagram.com/cookiesdakels.estudo" target="_blank" rel="noopener" aria-label="Instagram"><img src="assets/icon-instagram.svg" alt="" width="69" height="69"></a></li>
+              <li><a href="https://www.facebook.com/cookiesdakels.estudo" target="_blank" rel="noopener" aria-label="Facebook"><img src="assets/icon-facebook.svg" alt="" width="69" height="69"></a></li>
+              <li><a href="https://wa.me/5527900001234" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="assets/icon-whatsapp.svg" alt="" width="69" height="69"></a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Botão flutuante: acesso ao WhatsApp de qualquer ponto da página -->
+  <!-- Botão flutuante do cardápio completo -->
+  <button class="cardapio-flutuante js-abrir-cardapio" type="button" aria-label="Abrir cardápio completo">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v14H4zM8 9h8M8 13h8M8 17h4"/></svg>
+    <span>Cardápio</span>
+  </button>
+
+  <div class="whats-flutuante" id="whats-widget">
+    <div class="whats-balao" id="whats-balao" role="dialog" aria-labelledby="whats-balao-titulo">
+      <button class="whats-balao__fechar" type="button" aria-label="Fechar">&times;</button>
+      <p class="whats-balao__titulo" id="whats-balao-titulo">Como podemos ajudar?</p>
+      <a class="whats-balao__opcao" href="https://wa.me/5527900001234?text=Ol%C3%A1!%20Preciso%20de%20ajuda%20com%20um%20pedido%20que%20j%C3%A1%20fiz." target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>Precisa de ajuda com um pedido feito?</a>
+      <a class="whats-balao__opcao" href="https://wa.me/5527900001234?text=Ol%C3%A1!%20Quero%20entrar%20em%20contato." target="_blank" rel="noopener"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-whatsapp"/></svg>Quero entrar em contato</a>
+    </div>
+    <button class="whats-flutuante__btn" type="button" aria-expanded="false" aria-controls="whats-balao" aria-label="Falar pelo WhatsApp">
+      <img src="assets/contact-whatsapp.svg" alt="" width="68" height="68">
+    </button>
+  </div>
+
+  <!-- Voltar ao topo: aparece quando o rodapé entra na tela -->
+  <a class="topo-flutuante" href="#inicio" aria-label="Voltar ao topo"><svg class="icone" aria-hidden="true" focusable="false"><use href="#i-seta-cima"/></svg></a>
+
+  <script src="assets/js/catalogo.js" defer></script>
+  <script src="assets/js/main.js" defer></script>
+</body>
+</html>
