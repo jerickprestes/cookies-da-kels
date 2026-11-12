@@ -16,7 +16,7 @@
   var CHAVE = 'kels-carrinho';
   var MAX_QTD = 99;
   var PRAZO_DIAS = 2;            // antecedência mínima da encomenda
-  var POR_VITRINE = 3;           // cards em cada vitrine da landing
+  var POR_VITRINE = 6;           // cards em cada vitrine da landing (carrossel)
   var FOTOS = {                  // dimensões reais das fotos
     tradicional: [640, 957],
     triple: [640, 960],
@@ -516,10 +516,20 @@
     var tag = grade.dataset.vitrine;
     var escolhidos = CATALOGO.filter(function (s) { return s.tags.indexOf(tag) >= 0; });
     if (tag === 'mais-vendido') escolhidos.sort(function (a, b) { return a.rank - b.rank; });
-    escolhidos.slice(0, POR_VITRINE).forEach(function (s, i) {
-      var selo = tag === 'mais-vendido' ? 'Nº ' + (i + 1) : SELOS[tag];
-      grade.appendChild(criarCard(s, selo));
-    });
+    var itens = escolhidos.slice(0, POR_VITRINE);
+    for (var rep = 0; rep < 3; rep++) {        // 3 conjuntos: o do meio é o real, os outros formam o loop infinito
+      itens.forEach(function (s, i) {
+        var selo = tag === 'mais-vendido' ? 'Nº ' + (i + 1) : SELOS[tag];
+        var card = criarCard(s, selo);
+        if (rep !== 1) {
+          card.setAttribute('aria-hidden', 'true');
+          $$('button, input', card).forEach(function (el) { el.tabIndex = -1; });
+        }
+        grade.appendChild(card);
+      });
+    }
+    grade.dataset.total = itens.length;
+    montarCarrosselVitrine(grade, itens.length);
   });
 
   /* ==========================================================================
@@ -681,53 +691,93 @@
     if (!raiz) return;
     var pista = $('#carrossel-pista');
     var slides = $$('.carrossel__slide', pista);
+    var n = slides.length;
     var pontosEl = $('#carrossel-pontos');
-    var atual = 0;
     var auto = null;
+    var ocioso = null;
     var reduz = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function mod(a, b) { return ((a % b) + b) % b; }
+    function largura() { return pista.clientWidth; }
+    function absoluto() { return Math.round(pista.scrollLeft / largura()); }
+
+    /* Loop infinito: cópias dos slides antes e depois dos reais */
+    function copias() {
+      return slides.map(function (sl) {
+        var c = sl.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        return c;
+      });
+    }
+    copias().forEach(function (c) { pista.appendChild(c); });
+    copias().reverse().forEach(function (c) { pista.insertBefore(c, pista.firstChild); });
 
     var pontos = slides.map(function (_, i) {
       var p = criar('button', 'carrossel__ponto');
       p.type = 'button';
       p.setAttribute('aria-label', 'Ir para a foto ' + (i + 1));
-      p.addEventListener('click', function () { ir(i); parar(); });
+      p.addEventListener('click', function () { ir(n + i); parar(); });
       pontosEl.appendChild(p);
       return p;
     });
 
-    function marcar(i) {
-      atual = i;
+    function marcar() {
+      var i = mod(absoluto(), n);
       pontos.forEach(function (p, k) { p.setAttribute('aria-current', k === i ? 'true' : 'false'); });
     }
-    function ir(i) {
-      i = (i + slides.length) % slides.length;
-      pista.scrollTo({ left: i * pista.clientWidth, behavior: reduz ? 'auto' : 'smooth' });
-      marcar(i);
+    function ir(abs) {
+      pista.scrollTo({ left: abs * largura(), behavior: reduz ? 'auto' : 'smooth' });
     }
     function parar() { clearInterval(auto); auto = null; }
     function iniciar() {
       if (reduz || auto) return;
-      auto = setInterval(function () { ir(atual + 1); }, 4500);
+      auto = setInterval(function () { ir(absoluto() + 1); }, 4500);
     }
 
-    $('.carrossel__btn--ant', raiz).addEventListener('click', function () { ir(atual - 1); parar(); });
-    $('.carrossel__btn--prox', raiz).addEventListener('click', function () { ir(atual + 1); parar(); });
+    $('.carrossel__btn--ant', raiz).addEventListener('click', function () { ir(absoluto() - 1); parar(); });
+    $('.carrossel__btn--prox', raiz).addEventListener('click', function () { ir(absoluto() + 1); parar(); });
 
-    var quadro = null;
     pista.addEventListener('scroll', function () {   // arrastar/rolar com o dedo atualiza os pontos
-      if (quadro) return;
-      quadro = requestAnimationFrame(function () {
-        quadro = null;
-        marcar(Math.round(pista.scrollLeft / pista.clientWidth));
-      });
+      marcar();
+      clearTimeout(ocioso);
+      ocioso = setTimeout(function () {                // volta ao conjunto do meio sem que se perceba
+        var conjunto = n * largura();
+        var x = pista.scrollLeft;
+        var alvo = mod(x, conjunto) + conjunto;
+        if (Math.abs(alvo - x) > 1) pista.scrollLeft = alvo;
+      }, 120);
+    }, { passive: true });
+    window.addEventListener('resize', function () {
+      pista.scrollLeft = (mod(absoluto(), n) + n) * largura();
+      marcar();
     });
 
     raiz.addEventListener('mouseenter', parar);
     raiz.addEventListener('focusin', parar);
     raiz.addEventListener('mouseleave', iniciar);
 
-    marcar(0);
+    pista.scrollLeft = n * largura();
+    marcar();
     iniciar();
+  })();
+
+  /* ==========================================================================
+     DEPOIMENTOS EM MARQUEE (faixa contínua; pausa ao passar o mouse/foco)
+     ========================================================================== */
+  (function () {
+    var lista = $('.depoimentos__lista');
+    if (!lista) return;
+    Array.prototype.slice.call(lista.children).forEach(function (li) {
+      var c = li.cloneNode(true);
+      c.setAttribute('aria-hidden', 'true');
+      c.classList.add('depoimento-clone');
+      lista.appendChild(c);
+    });
+    var faixa = document.createElement('div');
+    faixa.className = 'depoimentos__faixa';
+    lista.parentNode.insertBefore(faixa, lista);
+    faixa.appendChild(lista);
+    lista.classList.add('is-marquee');
   })();
 
   /* ==========================================================================
@@ -769,6 +819,171 @@
 
     $('#btn-revenda-fechar').addEventListener('click', function () { fecharPainel(painel); });
   })();
+
+
+  /* ==========================================================================
+     CARROSSEL ARRASTÁVEL DAS VITRINES (mouse, toque e teclado)
+     Desktop: 3 cards visíveis · tablet: 2 · celular: 1 por vez (CSS).
+     ========================================================================== */
+  function montarCarrosselVitrine(pista, n) {
+    var cards = Array.prototype.slice.call(pista.children);
+    if (!cards.length || !n) return;
+    var secao = pista.closest('section');
+    var titulo = secao && $('h2', secao);
+
+    var moldura = document.createElement('div');
+    moldura.className = 'vitrine__carrossel';
+    pista.parentNode.insertBefore(moldura, pista);
+    moldura.appendChild(pista);
+
+    pista.setAttribute('role', 'region');
+    pista.setAttribute('aria-roledescription', 'carrossel');
+    pista.setAttribute('aria-label', titulo ? titulo.textContent : 'Sabores');
+    pista.tabIndex = 0;
+
+    function criarSeta(lado) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'vitrine__seta vitrine__seta--' + lado;
+      b.setAttribute('aria-label', lado === 'ant' ? 'Sabores anteriores' : 'Próximos sabores');
+      b.appendChild(icone(lado === 'ant' ? 'seta-esq' : 'seta-dir'));
+      moldura.appendChild(b);
+      return b;
+    }
+    var ant = criarSeta('ant');
+    var prox = criarSeta('prox');
+
+    var pontos = document.createElement('div');
+    pontos.className = 'vitrine__pontos';
+    for (var k = 0; k < n; k++) {
+      (function (i) {
+        var p = document.createElement('button');
+        p.type = 'button';
+        p.className = 'vitrine__ponto';
+        p.setAttribute('aria-label', 'Ir para o sabor ' + (i + 1));
+        p.addEventListener('click', function () { irPara(n + i); });
+        pontos.appendChild(p);
+      })(k);
+    }
+    moldura.appendChild(pontos);
+
+    function passo() {
+      var gap = parseFloat(getComputedStyle(pista).columnGap) || 0;
+      return cards[0].getBoundingClientRect().width + gap;
+    }
+    function comportamento() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    }
+    function irPara(i) { pista.scrollTo({ left: i * passo(), behavior: comportamento() }); }
+    function absoluto() { return Math.round(pista.scrollLeft / passo()); }
+    function mod(a, b) { return ((a % b) + b) % b; }
+
+    function marcar() {
+      var i = mod(absoluto(), n);
+      Array.prototype.forEach.call(pontos.children, function (p, k2) {
+        if (k2 === i) p.setAttribute('aria-current', 'true'); else p.removeAttribute('aria-current');
+      });
+    }
+
+    /* Loop infinito: ao parar de rolar, volta ao conjunto do meio (visualmente idêntico) */
+    var ocioso = null;
+    function recentralizar() {
+      if (arrastando) return;
+      var conjunto = n * passo();
+      var x = pista.scrollLeft;
+      var alvo = mod(x, conjunto) + conjunto;
+      if (Math.abs(alvo - x) > 1) pista.scrollLeft = alvo;
+    }
+    pista.addEventListener('scroll', function () {
+      marcar();
+      clearTimeout(ocioso);
+      ocioso = setTimeout(recentralizar, 120);
+    }, { passive: true });
+    window.addEventListener('resize', function () {
+      pista.scrollLeft = (mod(absoluto(), n) + n) * passo();
+      marcar();
+    });
+
+    ant.addEventListener('click', function () { irPara(absoluto() - 1); });
+    prox.addEventListener('click', function () { irPara(absoluto() + 1); });
+    pista.addEventListener('keydown', function (e) {
+      if (e.target !== pista) return;
+      if (e.key === 'ArrowRight') { e.preventDefault(); irPara(absoluto() + 1); }
+      if (e.key === 'ArrowLeft') { e.preventDefault(); irPara(absoluto() - 1); }
+    });
+
+    /* Arrastar com o mouse (toque e caneta já rolam nativamente) */
+    var inicioX = 0, inicioScroll = 0, apontando = false, arrastando = false, moveu = false;
+    pista.addEventListener('pointerdown', function (e) {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      apontando = true; arrastando = false; moveu = false;
+      inicioX = e.clientX; inicioScroll = pista.scrollLeft;
+    });
+    pista.addEventListener('pointermove', function (e) {
+      if (!apontando) return;
+      var dx = e.clientX - inicioX;
+      if (!arrastando && Math.abs(dx) > 5) {
+        arrastando = true; moveu = true;
+        pista.classList.add('is-arrastando');
+        try { pista.setPointerCapture(e.pointerId); } catch (_) { /* ignora */ }
+      }
+      if (arrastando) pista.scrollLeft = inicioScroll - dx;
+    });
+    function soltar(e) {
+      if (!apontando) return;
+      apontando = false;
+      if (!arrastando) return;
+      arrastando = false;
+      try { pista.releasePointerCapture(e.pointerId); } catch (_) { /* ignora */ }
+      var alvo = Math.round(pista.scrollLeft / passo()) * passo();
+      pista.classList.remove('is-arrastando');
+      pista.scrollTo({ left: alvo, behavior: comportamento() });
+    }
+    pista.addEventListener('pointerup', soltar);
+    pista.addEventListener('pointercancel', soltar);
+    /* Um arraste não pode virar clique em tamanho, quantidade ou Adicionar */
+    pista.addEventListener('click', function (e) {
+      if (moveu) { e.preventDefault(); e.stopPropagation(); moveu = false; }
+    }, true);
+    pista.addEventListener('dragstart', function (e) { e.preventDefault(); });
+
+    pista.scrollLeft = n * passo();   // começa no conjunto do meio
+    marcar();
+  }
+
+  /* ==========================================================================
+     FAQ: abertura e fechamento suaves (Web Animations API)
+     ========================================================================== */
+  $$('.faq__item').forEach(function (item) {
+    var resumo = $('summary', item);
+    var corpo = $('p', item);
+    if (!resumo || !corpo || !corpo.animate) return;
+    var anim = null;
+
+    function animar(abrindo) {
+      if (anim) anim.cancel();
+      var cs = getComputedStyle(corpo);
+      var alturaCheia = corpo.scrollHeight;
+      var pad = cs.paddingBottom;
+      var de = { height: '0px', paddingBottom: '0px', opacity: 0 };
+      var ate = { height: alturaCheia + 'px', paddingBottom: pad, opacity: 1 };
+      corpo.style.overflow = 'hidden';
+      anim = corpo.animate(abrindo ? [de, ate] : [ate, de], { duration: 280, easing: 'ease' });
+      anim.onfinish = anim.oncancel = function () {
+        anim = null;
+        corpo.style.overflow = '';
+        if (!abrindo) item.removeAttribute('open');
+      };
+    }
+
+    resumo.addEventListener('click', function (e) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      e.preventDefault();
+      if (item.open && !anim) animar(false);
+      else if (item.open && anim) animar(false);
+      else { item.setAttribute('open', ''); animar(true); }
+    });
+  });
 
   /* ---------- Início ---------- */
   carregar();

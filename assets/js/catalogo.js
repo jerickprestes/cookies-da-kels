@@ -37,7 +37,7 @@ window.KELS_CATALOGO = [
 
   { id: 'docedeleite', nome: 'Doce de Leite Recheado', foto: 'nutella', categoria: 'Recheados',
     desc: 'Massa de baunilha com recheio cremoso de doce de leite',
-    precos: [15, 20, 26, 33], tags: [] },
+    precos: [15, 20, 26, 33], tags: ['mais-vendido', 'lancamento'], rank: 4 },
 
   { id: 'limao', nome: 'Limão Siciliano', foto: 'redvelvet', categoria: 'Frutas e castanhas',
     desc: 'Massa de limão siciliano com raspas e chocolate branco',
@@ -45,21 +45,21 @@ window.KELS_CATALOGO = [
 
   { id: 'caju', nome: 'Castanha de Caju e Caramelo', foto: 'tradicional', categoria: 'Frutas e castanhas',
     desc: 'Massa amanteigada com castanha de caju e calda de caramelo',
-    precos: [15, 20, 26, 33], tags: [] },
+    precos: [15, 20, 26, 33], tags: ['destaque', 'lancamento'] },
 
   { id: 'brigadeiro', nome: 'Brigadeiro Gourmet', foto: 'triple', categoria: 'Chocolates',
     desc: 'Massa de cacau com brigadeiro cremoso e granulado',
-    precos: [14, 19, 25, 32], tags: [] },
+    precos: [14, 19, 25, 32], tags: ['mais-vendido', 'lancamento'], rank: 5 },
 
   { id: 'ninho', nome: 'Ninho com Morango', foto: 'redvelvet', categoria: 'Recheados',
     desc: 'Massa de leite Ninho com recheio de morango',
-    precos: [16, 21, 27, 34], tags: ['lancamento'] },
+    precos: [16, 21, 27, 34], tags: ['destaque', 'lancamento'] },
 
   { id: 'churros', nome: 'Churros com Doce de Leite', foto: 'tradicional', categoria: 'Especiais',
     desc: 'Massa com canela e açúcar, recheada com doce de leite',
-    precos: [15, 20, 26, 33], tags: ['destaque'] },
+    precos: [15, 20, 26, 33], tags: ['mais-vendido', 'destaque'], rank: 6 },
 
   { id: 'pistache', nome: 'Pistache Cremoso', foto: 'nutella', categoria: 'Especiais',
     desc: 'Massa de pistache com chocolate branco e pistache picado',
-    precos: [16, 21, 27, 34], tags: ['lancamento'] }
+    precos: [16, 21, 27, 34], tags: ['destaque', 'lancamento'] }
 ];

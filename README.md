@@ -33,13 +33,23 @@ Cada `<section class="section">` ocupa no mínimo `100vh`/`100svh` e termina com
 
 - **Menu offcanvas** (direita), aberto por botão flutuante. O logo flutuante aparece no canto superior esquerdo ao sair da hero.
 - **Cardápio completo**: offcanvas em tela cheia que sobe de baixo, com filtros (categoria, busca e ordenação). Todos os sabores aparecem só aqui.
+<<<<<<< HEAD
 - **Vitrines** na landing (Mais vendidos, Destaques, Lançamentos), com 3 cards cada, gerados do mesmo catálogo.
+=======
+- **Vitrines** na landing (Mais vendidos, Destaques, Lançamentos): carrossel arrastável e infinito (loop) com 6 cards cada, gerados do mesmo catálogo. Desktop mostra 3 por vez, tablet 2 e celular 1 (com bolinhas). Arrasta com mouse ou dedo, tem setas no desktop e funciona com as setas do teclado.
+>>>>>>> 9ccb47e (criação carrossel de produtos na home)
 - **Carrinho**: seletor de tamanho (P, M, G, GG) e quantidade por card; barra inferior com resumo, "Limpar carrinho" (confirmação no próprio botão) e "Finalizar". Salvo em `localStorage` (`kels-carrinho`).
 - **Checkout offcanvas**: entrega ou retirada, endereço, data, pagamento e observações. Entrega soma R$ 6,00. O pedido é formatado e aberto no WhatsApp (`wa.me`).
 - **Formulário de revenda** (offcanvas): inscrição enviada ao WhatsApp.
 - **WhatsApp flutuante**: abre um balão com "Precisa de ajuda com um pedido feito?" e "Quero entrar em contato".
+<<<<<<< HEAD
 - **Voltar ao topo** ao chegar no rodapé.
 - **Animações**: cookie da hero sobe e balança de tempos em tempos; fade-in a cada entrada de seção. Ambos respeitam `prefers-reduced-motion`.
+=======
+- **Depoimentos**: 8 comentários fictícios, com foto do pedido, em marquee contínuo (pausa no hover/foco; sem animação com `prefers-reduced-motion`).
+- **Voltar ao topo** ao chegar no rodapé.
+- **Animações**: cookie da hero sobe e balança de tempos em tempos; fade-in a cada entrada de seção; FAQ abre e fecha com transição suave. Ambos respeitam `prefers-reduced-motion`.
+>>>>>>> 9ccb47e (criação carrossel de produtos na home)
 - **Acessibilidade**: Esc fecha o painel do topo, foco preso nos painéis, região `aria-live` para o carrinho, `:focus-visible` visível.
 
 ## Regras de negócio (fictícias)
@@ -73,7 +83,11 @@ Os sabores ficam em `assets/js/catalogo.js`. Cada item:
 }
 ```
 
+<<<<<<< HEAD
 Adicionar ou remover um item atualiza automaticamente o cardápio e as vitrines. O preço do carrinho é sempre relido do catálogo.
+=======
+Cada vitrine mostra até 6 sabores (`POR_VITRINE` em `main.js`); um sabor pode ter mais de uma tag. Adicionar ou remover um item atualiza automaticamente o cardápio e as vitrines. O preço do carrinho é sempre relido do catálogo.
+>>>>>>> 9ccb47e (criação carrossel de produtos na home)
 
 ## Design
 

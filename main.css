@@ -420,8 +420,9 @@ body.painel-aberto {
 }
 
 .hero__texto .btn {
-  max-width: 465px;
-  --btn-fs: clamp(1.5rem, 2.5vw, 2.25rem);   /* 36px no desktop */
+  max-width: 306px;
+  --btn-h: 56px;
+  --btn-fs: 1.25rem;   /* igual ao botão "Ver cardápio" de Os ingredientes */
 }
 
 /* Círculo roxo + cookie que "vaza" do círculo */
@@ -454,7 +455,7 @@ body.painel-aberto {
 .receita__lista {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 2.5rem 1rem;
+  gap: 1.25rem 1rem;
   margin-top: 2.5rem;
   text-align: center;
 }
@@ -466,6 +467,13 @@ body.painel-aberto {
 #receita-titulo {
   max-width: 624px;
   margin-inline: auto;
+}
+
+.ingrediente {
+  padding: 1.25rem 1rem 1.5rem;
+  border-radius: 24px;
+  background-color: var(--rosa-claro);
+  box-shadow: 0 10px 24px rgba(133, 98, 172, 0.22);
 }
 
 .ingrediente__visual {
@@ -946,38 +954,116 @@ body.painel-aberto {
   font-size: 1.75rem;
 }
 
-/* Depoimentos (nova seção) */
+/* Depoimentos (nova seção): lista rolável; vira marquee quando o JS adiciona .is-marquee */
 .depoimentos__lista {
-  display: grid;
-  gap: 1.25rem;
+  display: flex;
   margin-top: 2.5rem;
+  padding: 0.25rem 0 1rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.depoimentos__lista::-webkit-scrollbar {
+  display: none;
+}
+
+.depoimentos__lista > li {
+  flex: 0 0 min(300px, 82vw);
+  margin-right: 1.25rem;
 }
 
 .depoimento {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
   height: 100%;
-  padding: 1.75rem 1.5rem;
+  padding: 1.5rem;
   border-radius: 20px;
   background-color: var(--rosa-claro);
 }
 
+.depoimento__autor {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.depoimento__foto {
+  flex: 0 0 56px;
+  width: 56px;
+  height: 56px;
+  border: 3px solid var(--branco);
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 8px rgba(133, 98, 172, 0.25);
+}
+
 .depoimento blockquote p {
-  font-size: 1.0625rem;
+  font-size: 1rem;
   font-weight: 500;
-  line-height: 1.4;
+  line-height: 1.45;
   color: var(--roxo);
 }
 
 .depoimento figcaption {
-  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
   font-size: 0.9375rem;
-  font-weight: 700;
   color: var(--rosa-texto);
+}
+
+.depoimento figcaption strong {
+  font-weight: 700;
+}
+
+.depoimento figcaption span {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--roxo);
+}
+
+/* Marquee: faixa contínua com bordas esmaecidas */
+@media (prefers-reduced-motion: no-preference) {
+  .depoimentos__lista.is-marquee {
+    width: max-content;
+    max-width: none;
+    overflow: visible;
+    animation: marquee 70s linear infinite;
+  }
+
+  .depoimentos__lista.is-marquee:hover,
+  .depoimentos__lista.is-marquee:focus-within {
+    animation-play-state: paused;
+  }
+
+  .depoimentos__faixa {
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+  }
+}
+
+/* Sem animação (redução de movimento): rolagem manual, sem cópias */
+@media (prefers-reduced-motion: reduce) {
+  .depoimento-clone {
+    display: none;
+  }
 }
 
 .depoimentos__cta {
   display: flex;
-  max-width: 306px;
+  width: fit-content;
+  max-width: 100%;
   margin: 2.5rem auto 0;
+  white-space: nowrap;
+  --btn-h: 56px;
+  --btn-fs: 1.125rem;
 }
 
 /* Sabores limitados: bloco de destaque e dois botões */
@@ -1007,14 +1093,7 @@ body.painel-aberto {
   line-height: 1.2;
 }
 
-/* Revendedor: legenda do crachá e caixa de condições */
-.revendedor__legenda {
-  margin-top: 0.75rem;
-  font-size: 0.875rem;
-  text-align: center;
-  color: var(--rosa-texto);
-}
-
+/* Revendedor: caixa de condições */
 .condicoes {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1634,12 +1713,102 @@ body.tem-carrinho .contato {
   color: var(--branco);
 }
 
-.vitrine__grade {
-  display: grid;
-  grid-template-columns: minmax(0, 300px);
-  justify-content: center;
-  gap: 1rem;
+.vitrine__carrossel {
+  position: relative;
   margin-top: 2rem;
+}
+
+/* Pista arrastável: 1 card por vez no celular, 2 no tablet, 3 no desktop */
+.vitrine__grade {
+  --gap: 1rem;
+  --visiveis: 1;
+  display: flex;
+  gap: var(--gap);
+  padding: 0.25rem 0 0.75rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.vitrine__grade::-webkit-scrollbar {
+  display: none;
+}
+
+.vitrine__grade > * {
+  flex: 0 0 calc((100% - (var(--visiveis) - 1) * var(--gap)) / var(--visiveis));
+  min-width: 0;
+  scroll-snap-align: start;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.vitrine__grade img {
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.vitrine__grade.is-arrastando {
+  cursor: grabbing;
+  scroll-snap-type: none;
+}
+
+.vitrine__grade.is-arrastando * {
+  pointer-events: none;
+}
+
+.vitrine__seta {
+  display: none;
+  position: absolute;
+  top: 50%;
+  z-index: 3;
+  width: 44px;
+  height: 44px;
+  margin-top: -22px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: var(--branco);
+  color: var(--roxo);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  place-items: center;
+}
+
+.vitrine__seta .icone {
+  width: 20px;
+  height: 20px;
+}
+
+.vitrine__seta:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.vitrine__seta--ant  { left: -22px; }
+.vitrine__seta--prox { right: -22px; }
+
+.vitrine__pontos {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.vitrine__ponto {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+}
+
+.vitrine__ponto[aria-current="true"] {
+  background-color: var(--branco);
 }
 
 .vitrine .card__foto {
@@ -2130,7 +2299,15 @@ body.painel-aberto .topo-flutuante {
   }
 
   .vitrine__grade {
-    grid-template-columns: repeat(2, minmax(0, 300px));
+    --visiveis: 2;
+  }
+
+  .vitrine__seta {
+    display: grid;
+  }
+
+  .vitrine__pontos {
+    display: none;
   }
 
   .carrinho-barra .carrinho-limpar__texto {
@@ -2191,8 +2368,8 @@ body.painel-aberto .topo-flutuante {
   /* 2. Receita: 4 colunas de 228px */
   .receita__lista {
     grid-template-columns: repeat(4, 1fr);
-    gap: 0 10px;
-    margin-top: 3.5rem;
+    gap: 0 1.25rem;
+    margin-top: 2.5rem;
   }
 
   .ingrediente__visual {
@@ -2303,14 +2480,12 @@ body.painel-aberto .topo-flutuante {
 
   /* Vitrines: 3 cards ocupando toda a largura padrão do conteúdo */
   .vitrine__grade {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1.5rem;
+    --gap: 1.5rem;
+    --visiveis: 3;
   }
 
-  /* Depoimentos: 3 colunas */
-  .depoimentos__lista {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  .depoimentos__lista > li {
+    margin-right: 1.5rem;
   }
 
   .whats-flutuante {
@@ -2349,10 +2524,6 @@ body.painel-aberto .topo-flutuante {
 
   .btn--grande {
     --btn-h: 80px;
-  }
-
-  .hero__texto .btn {
-    --btn-h: 72px;
   }
 
   .limitados__card {
